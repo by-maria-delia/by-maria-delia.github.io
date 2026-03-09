@@ -78,7 +78,8 @@ export default function useDriveFolder(type: FolderType): UseDriveFolderResult {
 
 /** Builds a direct-display URL for a publicly shared Drive image. */
 export function driveImageUrl(fileId: string): string {
-	return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+	return `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${import.meta.env.VITE_GOOGLE_DRIVE_API_KEY}`;
+	// return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
 	// return `https://drive.google.com/uc?export=view&id=${fileId}`;
 	// return `https://lh3.googleusercontent.com/d/${fileId}`;
 }

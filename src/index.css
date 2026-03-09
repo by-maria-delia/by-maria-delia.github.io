@@ -181,3 +181,15 @@ p {
   background: var(--color-bison-hide);
   border-radius: 999px;
 }
+
+.custom-scrollbar::-webkit-scrollbar-track-piece {
+  background: var(--color-janna);
+}
+
+.model-mask-shadow {
+  filter: drop-shadow(1px 1px 1px var(--color-denim-blue)) drop-shadow(-1px -1px 1px var(--color-denim-blue));
+}
+
+.model-mask-shadow-inner {
+  filter: drop-shadow(-1px 0px 0px #00000091) drop-shadow(1px 0px 0px #00000091)
+}

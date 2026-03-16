@@ -31,6 +31,7 @@ export default function Showcase() {
 							<img
 								src={driveImageUrl(image.id)}
 								alt={image.name}
+								loading="lazy"
 								className="w-full h-auto object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
 							/>
 						</FadeUp>

@@ -3,7 +3,7 @@ export default function DeliveryInfo() {
 		<section className="relative px-4 py-24 overflow-hidden bg-cream/50">
 			{/* Ambient gradient */}
 			<div className="absolute inset-0 pointer-events-none">
-				<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-100 bg-school-blue/5 rounded-full blur-[120px]" />
+				<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-100 bg-school-blue/5 rounded-full blur-[80px]" />
 			</div>
 
 			<div className="relative max-w-2xl mx-auto text-center">

@@ -254,6 +254,7 @@ export default function Customizer({
 													<img
 														src={driveImageUrl(image.id)}
 														alt={displayName}
+														loading="lazy"
 														className="object-contain w-full h-full"
 													/>
 												</div>
@@ -289,6 +290,7 @@ export default function Customizer({
 													<img
 														src={driveImageUrl(image.id)}
 														alt={displayName}
+														loading="lazy"
 														className="object-cover w-full h-full"
 													/>
 												</div>

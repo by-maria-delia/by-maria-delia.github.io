@@ -5,8 +5,8 @@ export default function Hero() {
 		<section className="relative overflow-hidden bg-spanish-white min-h-[85dvh] flex items-center px-4">
 			{/* Ambient background — soft radial gradients */}
 			<div className="absolute inset-0 pointer-events-none">
-				<div className="absolute top-0 left-1/4 w-150 h-150 bg-school-blue/8 rounded-full blur-[120px]" />
-				<div className="absolute bottom-0 right-1/4 w-125 h-125 bg-teacher-pink/6 rounded-full blur-[100px]" />
+				<div className="absolute top-0 left-1/4 w-150 h-150 bg-school-blue/8 rounded-full blur-[80px]" />
+				<div className="absolute bottom-0 right-1/4 w-125 h-125 bg-teacher-pink/6 rounded-full blur-[70px]" />
 			</div>
 
 			<div className="relative w-full max-w-3xl mx-auto">

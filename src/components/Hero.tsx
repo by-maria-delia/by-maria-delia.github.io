@@ -23,7 +23,7 @@ export default function Hero() {
 				</FadeUp>
 
 				<FadeUp delay={200}>
-					<p className="max-w-md mb-12 text-lg leading-relaxed md:text-xl text-denim-blue/70">
+					<p className="max-w-md mb-12 text-lg leading-relaxed md:text-xl text-denim-blue/80">
 						Guardapolvos artesanales y personalizables para maestras jardineras
 					</p>
 				</FadeUp>

@@ -10,7 +10,7 @@
   /* primary UI highlights, hover accents */
   --color-bison-hide: #C8BDAC;
   /* borders, dividers, subtle surfaces */
-  --color-bud: #A2A69B;
+  --color-bud: #666058;
   /* secondary text, muted labels */
 
   /* Semantic aliases — components reference these */
@@ -26,7 +26,7 @@
   --color-warm-yellow: #E3C567;
   --color-floral-teal: #BED5CF;
   --color-dark-text: #2e2a26;
-  --color-soft-gray: #A2A69B;
+  --color-soft-gray: #666058;
 
   --font-display: 'Oooh Baby', cursive;
   --font-body: 'Nunito', sans-serif;
@@ -34,29 +34,29 @@
 }
 
 html {
-  scroll-behavior: smooth;
+	scroll-behavior: smooth;
 }
 
 body {
-  margin: 0;
-  font-family: var(--font-body);
-  color: var(--color-dark-text);
-  background-color: var(--color-soft-white);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	margin: 0;
+	font-family: var(--font-body);
+	color: var(--color-dark-text);
+	background-color: var(--color-soft-white);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 /* Noise texture overlay for depth */
 body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.35;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 256px 256px;
+	content: "";
+	position: fixed;
+	inset: 0;
+	pointer-events: none;
+	z-index: 9999;
+	opacity: 0.35;
+	background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+	background-repeat: repeat;
+	background-size: 256px 256px;
 }
 
 /* Typography refinements */
@@ -66,130 +66,138 @@ h3,
 h4,
 h5,
 h6 {
-  text-wrap: balance;
+	text-wrap: balance;
 }
 
 p {
-  text-wrap: pretty;
+	text-wrap: pretty;
 }
 
 /* Focus ring for accessibility */
 :focus-visible {
-  outline: 2px solid var(--color-school-blue);
-  outline-offset: 2px;
+	outline: 2px solid var(--color-school-blue);
+	outline-offset: 2px;
 }
 
 /* Staggered fade-in animation */
 @keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 @keyframes fade-in {
-  from {
-    opacity: 0;
-  }
+	from {
+		opacity: 0;
+	}
 
-  to {
-    opacity: 1;
-  }
+	to {
+		opacity: 1;
+	}
 }
 
 @keyframes slide-down {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
+	from {
+		opacity: 0;
+		transform: translateY(-8px);
+	}
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 .animate-fade-up {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+	opacity: 0;
+	transform: translateY(20px);
+	transition:
+		opacity 0.6s ease-out,
+		transform 0.6s ease-out;
 }
 
 .animate-fade-up.in-view {
-  opacity: 1;
-  transform: translateY(0);
+	opacity: 1;
+	transform: translateY(0);
 }
 
 .animate-fade-in {
-  opacity: 0;
-  transition: opacity 0.5s ease-out;
+	opacity: 0;
+	transition: opacity 0.5s ease-out;
 }
 
 .animate-fade-in.in-view {
-  opacity: 1;
+	opacity: 1;
 }
 
 .animate-slide-down {
-  animation: slide-down 0.3s ease-out both;
+	animation: slide-down 0.3s ease-out both;
 }
 
 /* Stagger delays */
 .delay-1 {
-  animation-delay: 0.1s;
+	animation-delay: 0.1s;
 }
 
 .delay-2 {
-  animation-delay: 0.2s;
+	animation-delay: 0.2s;
 }
 
 .delay-3 {
-  animation-delay: 0.3s;
+	animation-delay: 0.3s;
 }
 
 .delay-4 {
-  animation-delay: 0.4s;
+	animation-delay: 0.4s;
 }
 
 .delay-5 {
-  animation-delay: 0.5s;
+	animation-delay: 0.5s;
 }
 
 /* Button press feedback */
 .btn-press:active {
-  transform: scale(0.97) translateY(1px);
+	transform: scale(0.97) translateY(1px);
 }
 
 /* Smooth scrollbar */
 ::-webkit-scrollbar,
 .custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+	width: 8px;
+	height: 8px;
 }
 
 ::-webkit-scrollbar-track,
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: var(--color-janna);
+	background: var(--color-janna);
 }
 
 ::-webkit-scrollbar-thumb,
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--color-bison-hide);
-  border-radius: 999px;
+	background: var(--color-bison-hide);
+	border-radius: 999px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track-piece {
-  background: var(--color-janna);
+	background: var(--color-janna);
 }
 
 .model-mask-shadow {
-  filter: drop-shadow(1px 1px 1px var(--color-denim-blue)) drop-shadow(-1px -1px 1px var(--color-denim-blue));
+	filter: drop-shadow(1px 1px 1px var(--color-denim-blue))
+		drop-shadow(-1px -1px 1px var(--color-denim-blue));
 }
 
 .model-mask-shadow-inner {
-  filter: drop-shadow(-1px 0px 0px #00000091) drop-shadow(1px 0px 0px #00000091)
+	filter: drop-shadow(
+			-1px 0px 0px color-mix(in srgb, var(--color-dark-text) 57%, transparent)
+		)
+		drop-shadow(
+			1px 0px 0px color-mix(in srgb, var(--color-dark-text) 57%, transparent)
+		);
 }

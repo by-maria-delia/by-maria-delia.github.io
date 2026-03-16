@@ -44,7 +44,7 @@ export default function Footer() {
 							@mariadelia_guardapolvos
 						</a>
 
-						<span className="inline-flex items-center gap-2 text-white/50">
+						<span className="inline-flex items-center gap-2 text-white/60">
 							<svg
 								className="w-4 h-4"
 								fill="none"
@@ -69,7 +69,7 @@ export default function Footer() {
 				</div>
 
 				{/* Bottom bar */}
-				<div className="flex flex-col items-center justify-between gap-3 pt-6 text-xs border-t border-white/10 sm:flex-row text-white/30">
+				<div className="flex flex-col items-center justify-between gap-3 pt-6 text-xs border-t border-white/10 sm:flex-row text-white/60">
 					<p>
 						&copy; {new Date().getFullYear()} Maria Delia. Todos los derechos
 						reservados.

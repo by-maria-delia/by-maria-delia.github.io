@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import Papa from "papaparse";
@@ -6,6 +6,7 @@ import Papa from "papaparse";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const DATA_DIR = join(ROOT, "src", "data");
+const IMAGES_DIR = join(ROOT, "public", "drive-images");
 
 // ── Env vars ──────────────────────────────────────────────────────────
 // CI provides env vars directly; locally fall back to .env file
@@ -80,21 +81,23 @@ async function fetchSheet(gid, filename) {
 	writeData(filename, data);
 }
 
-// ── Fetch Google Drive folder (all pages) ─────────────────────────────
+// ── Google Drive ──────────────────────────────────────────────────────
+// Mirrors config.ts folder IDs and useDriveFolder.ts folder types
 const FOLDER_IDS = {
+	productsImages: "1GFqc4b_f0AOx77SctLcDIlVSSwSlxkQX",
 	gallery: "1A5Wa_M-i2aXM4BCLA-xvLgzzGriQ3Na1",
 	stamps: "1oM-E5h_3KE63q5l3-_x3nYBeVCN6SE2k",
-	"border-colors": "1GFqc4b_f0AOx77SctLcDIlVSSwSlxkQX",
+	borderColors: "1GFqc4b_f0AOx77SctLcDIlVSSwSlxkQX",
 };
 
-async function fetchDriveFolder(folderKey, filename) {
-	const folderId = FOLDER_IDS[folderKey];
+// Paginated Drive file listing — mirrors useDriveFolder.ts driveList()
+async function driveList(query) {
 	let allFiles = [];
 	let pageToken = undefined;
 
 	do {
 		const params = new URLSearchParams({
-			q: `'${folderId}' in parents and mimeType contains 'image/' and trashed = false`,
+			q: query,
 			key: DRIVE_API_KEY,
 			fields: "nextPageToken,files(id,name)",
 			pageSize: "100",
@@ -110,20 +113,114 @@ async function fetchDriveFolder(folderKey, filename) {
 		pageToken = json.nextPageToken;
 	} while (pageToken);
 
-	writeData(filename, allFiles);
+	return allFiles;
+}
+
+async function fetchDriveFolder(folderKey, filename) {
+	const folderId = FOLDER_IDS[folderKey];
+	const files = await driveList(
+		`'${folderId}' in parents and mimeType contains 'image/' and trashed = false`,
+	);
+	writeData(filename, files);
+}
+
+// Mirrors useDriveFolder.ts multipleFolders option: lists subfolders, then images in each
+async function fetchDriveMultiFolder(folderKey, filename) {
+	const folderId = FOLDER_IDS[folderKey];
+	const subfolders = await driveList(
+		`'${folderId}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
+	);
+
+	const results = await Promise.all(
+		subfolders.map(async (folder) => {
+			const images = await driveList(
+				`'${folder.id}' in parents and mimeType contains 'image/' and trashed = false`,
+			);
+			return { id: folder.id, name: folder.name, images };
+		}),
+	);
+
+	writeData(filename, results);
+}
+
+// ── Download Drive images ─────────────────────────────────────────────
+const MIME_TO_EXT = {
+	"image/jpeg": "jpg",
+	"image/png": "png",
+	"image/webp": "webp",
+	"image/gif": "gif",
+	"image/svg+xml": "svg",
+};
+
+// Shared manifest: fileId → extension (written to src/data at the end)
+const manifest = {};
+
+async function downloadImage(fileId) {
+	if (!fileId || manifest[fileId]) return;
+	try {
+		const res = await fetchWithRetry(
+			`https://lh3.googleusercontent.com/d/${fileId}`,
+		);
+		const contentType = res.headers.get("content-type") ?? "image/jpeg";
+		const ext = MIME_TO_EXT[contentType] ?? "jpg";
+		const buffer = Buffer.from(await res.arrayBuffer());
+		writeFileSync(join(IMAGES_DIR, `${fileId}.${ext}`), buffer);
+		manifest[fileId] = ext;
+	} catch (err) {
+		console.warn(`  ⚠ Failed to download ${fileId}: ${err.message}`);
+	}
+}
+
+async function downloadAllImages(imageIds) {
+	if (!existsSync(IMAGES_DIR)) mkdirSync(IMAGES_DIR, { recursive: true });
+
+	// Download in batches of 5 to avoid overwhelming the API
+	const BATCH = 5;
+	for (let i = 0; i < imageIds.length; i += BATCH) {
+		await Promise.all(imageIds.slice(i, i + BATCH).map(downloadImage));
+	}
+}
+
+function writeManifest() {
+	const path = join(DATA_DIR, "drive-manifest.json");
+	writeFileSync(path, JSON.stringify(manifest, null, "\t") + "\n");
+	console.log(`  ✓ drive-manifest.json (${Object.keys(manifest).length} images)`);
 }
 
 // ── Main ──────────────────────────────────────────────────────────────
 async function main() {
 	console.log("Prefetching data...\n");
 
+	// 1. Fetch metadata (sheets + drive folders)
 	await Promise.all([
 		fetchSheet(0, "products.json"),
 		fetchSheet(210216102, "smocks.json"),
 		fetchDriveFolder("gallery", "gallery.json"),
 		fetchDriveFolder("stamps", "stamps.json"),
-		fetchDriveFolder("border-colors", "border-colors.json"),
+		fetchDriveFolder("borderColors", "border-colors.json"),
+		fetchDriveMultiFolder("productsImages", "product-images.json"),
 	]);
+
+	// 2. Collect all image IDs to download
+	const readJson = (f) => JSON.parse(readFileSync(join(DATA_DIR, f), "utf-8"));
+	const galleryData = readJson("gallery.json");
+	const stampsData = readJson("stamps.json");
+	const borderColorsData = readJson("border-colors.json");
+	const productsData = readJson("products.json");
+	const productImagesData = readJson("product-images.json");
+
+	const imageIds = [
+		...galleryData.data.map((f) => f.id),
+		...stampsData.data.map((f) => f.id),
+		...borderColorsData.data.map((f) => f.id),
+		...productsData.data.map((p) => p.imagen).filter(Boolean),
+		...productImagesData.data.flatMap((folder) => folder.images.map((img) => img.id)),
+	];
+
+	// 3. Download images + write manifest
+	console.log(`\n  Downloading ${imageIds.length} images...`);
+	await downloadAllImages(imageIds);
+	writeManifest();
 
 	console.log("\nDone!");
 }

@@ -23,3 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# Prefetch-generated data (rebuilt by `yarn prefetch` / `yarn build`)
+src/data/*.json
+public/drive-images/

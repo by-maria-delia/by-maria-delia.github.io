@@ -13,22 +13,24 @@ React 19 + TypeScript 5.9 + Vite 7 + Tailwind CSS 4 + React Query (TanStack Quer
 - Products and gallery data come from **Google Sheets CSV** exports, parsed with PapaParse via `useGoogleSheet<T>()`.
 - **React Query** manages all data fetching. Use aggressive caching (`staleTime`, `gcTime`) to minimize API hits against Google Sheets rate limits. Prefer long stale times since sheet data changes infrequently.
 - Products filter by `disponible === "TRUE"`, gallery by `visible === "TRUE"`.
-- Customizer modal collects size/color/print selections, then opens WhatsApp with a pre-filled message.
+- Customizer modal collects size/pocket/print selections, then opens WhatsApp with a pre-filled message.
 
 ## Brand & Design
 
 ### Colors (use semantic names in Tailwind classes)
 | Name | Hex | Usage |
 |------|-----|-------|
-| School Blue | #9DB7D5 | Primary UI, product backgrounds |
-| Denim Blue | #5E6F82 | Secondary buttons, accents |
-| Soft White | #F7F7F4 | Main backgrounds |
+| Soft White / Janna | #F4EED7 | Main backgrounds |
+| Cream / Spanish White | #EAD0C3 | Card backgrounds, image placeholders |
+| School Blue / Jet Stream | #BED5CF | Primary UI highlights, hover accents |
+| School Blue Dark | #9ABFB8 | Hover/active variant of school-blue |
+| Bison Hide | #C8BDAC | Borders, dividers, subtle surfaces |
+| Denim Blue | #4a4540 | Headings, primary buttons (dark earthy) |
 | Leaf Green | #5E7D6A | Accents, nature references |
-| Teacher Pink | #E67A8A | Border trims, small CTA details |
+| Teacher Pink | #C0785E | Warm terracotta accents, small CTA details |
 | Warm Yellow | #E3C567 | Tiny details only |
-| Floral Teal | #6FAFB4 | Pocket print references |
-| Dark Text | #333333 | Main text |
-| Soft Gray | #777777 | Secondary text |
+| Dark Text | #2e2a26 | Main text |
+| Soft Gray | #666058 | Secondary text, muted labels (WCAG AA on all backgrounds) |
 
 ### Fonts (loaded from Google Fonts)
 - **Oooh Baby** — display/branding (hero title, logo)
@@ -48,7 +50,7 @@ Artesanal, calido, prolijo, clasico, amigable, docente, femenino. All copy in **
 ## Environment Variables (.env)
 ```
 VITE_WSP_NUMBER=...
-VITE_PRODUCTS_SHEET_CSV_URL=...
+VITE_SHEET_CSV_URL=...
 ```
 
 ## CodeSeeker MCP Tools - MANDATORY FOR CODE DISCOVERY

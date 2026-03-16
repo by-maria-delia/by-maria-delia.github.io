@@ -1,0 +1,103 @@
+{
+  "generated_at": "2026-03-15T20:13:39.662Z",
+  "project_id": "9caab55b-7860-46b1-a648-ddc78c3df6c1",
+  "project_path": "/Users/lucas/Desktop/maria-delia",
+  "standards": {
+    "logging": {
+      "console-logging": {
+        "preferred": "console.log/error/warn",
+        "usage_count": 1,
+        "files": [
+          "src/hooks/useDriveFolder.ts"
+        ],
+        "confidence": "low",
+        "rationale": "Pattern found in 1 files across the project.",
+        "example": "return { images, folders, loading, error };\n}",
+        "alternatives": []
+      }
+    },
+    "react-patterns": {
+      "usestate-hook": {
+        "preferred": "useState hook",
+        "import": "import { useState } from 'react';",
+        "usage_count": 5,
+        "files": [
+          "src/components/ImageCarousel.tsx",
+          "src/hooks/useDriveFolder.ts",
+          "src/components/ModelsGallery.tsx",
+          "src/components/Customizer.tsx"
+        ],
+        "confidence": "high",
+        "rationale": "useState hook used in 5 files for local component state management.",
+        "example": "import { useRef, useState } from \"react\";\nimport { driveImageUrl } from \"../hooks/useDriveFolder\";\nimport type { DriveImage } from \"../types\";",
+        "alternatives": [
+          {
+            "pattern": "Custom hook (use* pattern)",
+            "usage_count": 4,
+            "recommendation": "Consider using \"useState hook\" instead (5 vs 4 occurrences)"
+          },
+          {
+            "pattern": "useEffect hook",
+            "usage_count": 2,
+            "recommendation": "Consider using \"useState hook\" instead (5 vs 2 occurrences)"
+          },
+          {
+            "pattern": "useRef hook",
+            "usage_count": 1,
+            "recommendation": "Consider using \"useState hook\" instead (5 vs 1 occurrences)"
+          }
+        ]
+      },
+      "custom-hook-use-pattern": {
+        "preferred": "Custom hook (use* pattern)",
+        "usage_count": 4,
+        "files": [
+          "src/hooks/useDriveFolder.ts",
+          "src/data/index.ts"
+        ],
+        "confidence": "high",
+        "rationale": "Custom hooks (use* pattern) found in 4 files. Reusable stateful logic across components.",
+        "example": "const response = await fetch(`${DRIVE_API}?${params}`);\n\tif (!response.ok) throw new Error(`HTTP ${response.status}`);",
+        "alternatives": []
+      },
+      "useeffect-hook": {
+        "preferred": "useEffect hook",
+        "import": "import { useEffect } from 'react';",
+        "usage_count": 2,
+        "files": [
+          "src/hooks/useDriveFolder.ts",
+          "src/components/Customizer.tsx"
+        ],
+        "confidence": "medium",
+        "rationale": "useEffect hook used in 2 files for side effects and lifecycle management.",
+        "example": "const response = await fetch(`${DRIVE_API}?${params}`);\n\tif (!response.ok) throw new Error(`HTTP ${response.status}`);",
+        "alternatives": []
+      },
+      "useref-hook": {
+        "preferred": "useRef hook",
+        "import": "import { useRef } from 'react';",
+        "usage_count": 1,
+        "files": [
+          "src/components/ImageCarousel.tsx"
+        ],
+        "confidence": "low",
+        "rationale": "useRef used in 1 files for DOM refs or mutable values that don't trigger re-renders.",
+        "example": "const [isZoomed, setIsZoomed] = useState(false);\n\tconst [zoomOrigin, setZoomOrigin] = useState({ x: 50, y: 50 });\n\tconst containerRef = useRef<HTMLDivElement>(null);",
+        "alternatives": []
+      }
+    },
+    "api-patterns": {
+      "fetch-api": {
+        "preferred": "Fetch API",
+        "usage_count": 1,
+        "files": [
+          "src/hooks/useDriveFolder.ts"
+        ],
+        "confidence": "low",
+        "rationale": "Native Fetch API used in 1 files for HTTP requests.",
+        "example": "const response = await fetch(`${DRIVE_API}?${params}`);\n\tif (!response.ok) throw new Error(`HTTP ${response.status}`);",
+        "alternatives": []
+      }
+    }
+  }
+}

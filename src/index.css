@@ -188,9 +188,30 @@ p {
 	background: var(--color-janna);
 }
 
+/* Standard scrollbar (Firefox, Android Chrome 121+) */
+.custom-scrollbar {
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-bison-hide) var(--color-janna);
+}
+
 .model-mask-shadow {
 	filter: drop-shadow(1px 1px 1px var(--color-denim-blue))
 		drop-shadow(-1px -1px 1px var(--color-denim-blue));
+}
+
+@keyframes slide-up-sheet {
+	from {
+		transform: translateY(100%);
+		opacity: 0.6;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+.animate-sheet-up {
+	animation: slide-up-sheet 0.4s cubic-bezier(0.25, 1, 0.5, 1) both;
 }
 
 @keyframes button-ready {

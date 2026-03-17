@@ -138,7 +138,10 @@ export default function Customizer({
 				aria-modal="true"
 				aria-labelledby="customizer-title"
 				tabIndex={-1}
-				className="bg-soft-white rounded-2xl max-w-6xl w-full max-h-[92vh] overflow-hidden shadow-2xl shadow-dark-text/10 animate-fade-up in-view flex flex-col outline-none"
+				className={cn(
+					"bg-soft-white rounded-2xl max-w-6xl w-full max-h-[92dvh] overflow-hidden shadow-2xl shadow-dark-text/10 flex flex-col outline-none",
+					isMobile ? "animate-sheet-up" : "animate-fade-up in-view",
+				)}
 			>
 				{/* Header */}
 				<div className="flex items-center justify-between px-6 py-4 border-b shrink-0 bg-soft-white border-denim-blue/10">
@@ -201,7 +204,7 @@ export default function Customizer({
 						{/* Size selector */}
 						{sizes.length > 0 && (
 							<fieldset>
-								<legend className="block mb-3 font-display text-lg text-denim-blue">
+								<legend className="block mb-3 text-denim-blue">
 									Talle <span className="text-teacher-pink">*</span>
 								</legend>
 								<div className="flex flex-wrap gap-2.5">
@@ -227,7 +230,7 @@ export default function Customizer({
 						{/* Pockets selector */}
 						{pocketsImages.length > 0 && (
 							<fieldset>
-								<legend className="block mb-3 font-display text-lg text-denim-blue">
+								<legend className="block mb-3 text-denim-blue">
 									Tipo de bolsillo <span className="text-teacher-pink">*</span>
 								</legend>
 								<div
@@ -285,7 +288,7 @@ export default function Customizer({
 						{/* Estampado selector */}
 						{stampImages.length > 0 && (
 							<fieldset className="min-w-0">
-								<legend className="block mb-3 font-display text-lg text-denim-blue">
+								<legend className="block mb-3 text-denim-blue">
 									Tipo de estampado <span className="text-teacher-pink">*</span>
 								</legend>
 								<div className="flex gap-3 overflow-x-scroll py-2.5 px-1 custom-scrollbar">

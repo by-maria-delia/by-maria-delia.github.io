@@ -37,10 +37,9 @@ jobs:
           VITE_WSP_NUMBER: ${{ secrets.VITE_WSP_NUMBER }}
 
       - name: Build
-        run: yarn build
+        run: yarn build:ci
         env:
           VITE_WSP_NUMBER: ${{ secrets.VITE_WSP_NUMBER }}
-          VITE_GOOGLE_DRIVE_API_KEY: ${{ secrets.VITE_GOOGLE_DRIVE_API_KEY }}
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4

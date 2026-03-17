@@ -106,6 +106,7 @@ yarn dev
 | `yarn dev` | Start dev server (live data from Google APIs) |
 | `yarn prefetch` | Fetch sheets + drive data + download images |
 | `yarn build` | Prefetch + Vite production build |
+| `yarn build:ci` | Vite build only (skips prefetch — used in CI after prefetch step) |
 | `yarn preview` | Preview production build locally |
 | `yarn lint` | Run ESLint |
 | `yarn deploy` | Build + deploy to GitHub Pages |

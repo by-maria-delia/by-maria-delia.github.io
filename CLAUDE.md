@@ -5,7 +5,8 @@ React 19 + TypeScript 5.9 + Vite 7 + Tailwind CSS 4 + React Query (TanStack Quer
 
 ## Commands
 - `yarn dev` — start dev server
-- `yarn build` — production build
+- `yarn build` — production build (prefetch + vite)
+- `yarn build:ci` — vite build only, used in CI after the prefetch step runs separately
 - `yarn lint` — run ESLint
 - `yarn deploy` — build + deploy to GitHub Pages
 

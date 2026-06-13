@@ -1,52 +1,28 @@
+import { products, productsDetails } from "../content/products";
 import useDriveFolder from "../hooks/useDriveFolder";
-import useGoogleSheet from "../hooks/useGoogleSheet";
-import type {
-	DriveFolder,
-	DriveFolderType,
-	DriveImage,
-	Product,
-	SheetType,
-	SmockData,
-} from "../types";
+import type { DriveFolderType, DriveImage } from "../types";
 import galleryJson from "./gallery.json";
 import pocketsJson from "./pockets.json";
-import productImagesJson from "./product-images.json";
-import productsJson from "./products.json";
-import smocksJson from "./smocks.json";
 import stampsJson from "./stamps.json";
 
-// Static data from build-time prefetch
-const staticProducts = productsJson.data as Product[];
-const staticProductsDetails = smocksJson.data as SmockData[];
+// Static data from build-time prefetch (gallery/stamps/pockets still on Drive)
 const staticGalleryImages = galleryJson.data as DriveImage[];
 const staticStampImages = stampsJson.data as DriveImage[];
 const staticPocketsImages = pocketsJson.data as DriveImage[];
-const staticProductFolders = productImagesJson.data as DriveFolder[];
 
-/**
- * In dev: fetches live data from Google Sheets, falls back to static JSON while loading.
- * In prod: returns static JSON instantly (zero API calls).
- */
-function useGoogleSheetDev<T>(type: SheetType, fallback: T[]) {
-	const data = useGoogleSheet<T>(import.meta.env.DEV ? type : null);
+/** Guardapolvos read from in-repo content; no network requests. */
+export const useProducts = () => ({
+	data: products,
+	loading: false,
+	error: null,
+});
 
-	if (!import.meta.env.DEV)
-		return { data: fallback, loading: false, error: null };
-
-	return data;
-}
-
-export const useProducts = () =>
-	useGoogleSheetDev<Product>("products", staticProducts);
-
-export const useProductsDetails = () => {
-	const { data, error, loading } = useGoogleSheetDev<SmockData>(
-		"details",
-		staticProductsDetails,
-	);
-
-	return { data: data[0], error, loading };
-};
+/** Global product details (sizes) read from in-repo content. */
+export const useProductsDetails = () => ({
+	data: productsDetails,
+	loading: false,
+	error: null,
+});
 
 function useDriveFolderDev(type: DriveFolderType, fallback: DriveImage[]) {
 	const data = useDriveFolder(import.meta.env.DEV ? type : null);
@@ -65,14 +41,3 @@ export const useStampImages = () =>
 
 export const usePocketsImages = () =>
 	useDriveFolderDev("pockets", staticPocketsImages);
-
-export const useProductImages = () => {
-	const data = useDriveFolder(import.meta.env.DEV ? "productsImages" : null, {
-		multipleFolders: true,
-	});
-
-	if (!import.meta.env.DEV)
-		return { folders: staticProductFolders, loading: false, error: null };
-
-	return data;
-};

@@ -3,14 +3,14 @@ import SizeGuideImg from "../assets/sizes_guide.png";
 import { usePocketsImages, useProductsDetails, useStampImages } from "../data";
 import { driveImageUrl } from "../hooks/useDriveFolder";
 import useIsMobile from "../hooks/useIsMobile";
-import type { DriveImage, Product } from "../types";
+import type { CarouselImage, Product } from "../types";
 import { cn } from "../utils/cn";
+import { formatPrice } from "../utils/formatPrice";
 import { buildWhatsAppURL } from "../utils/whatsapp";
 import ImageCarousel from "./ImageCarousel";
 
 interface CustomizerProps {
 	product: Product;
-	modelImages?: DriveImage[];
 	onClose: () => void;
 }
 
@@ -20,11 +20,7 @@ const formatImageName = (name: string) =>
 		.replace(/-/g, " ")
 		.replace(/\b\w/g, (c) => c.toUpperCase());
 
-export default function Customizer({
-	product,
-	modelImages,
-	onClose,
-}: CustomizerProps) {
+export default function Customizer({ product, onClose }: CustomizerProps) {
 	const [size, setSize] = useState("");
 	const [pockets, setPockets] = useState("");
 	const [estampado, setEstampado] = useState("");
@@ -35,13 +31,12 @@ export default function Customizer({
 	const { images: stampImages } = useStampImages();
 	const { images: pocketsImages } = usePocketsImages();
 	const { data: productDetails } = useProductsDetails();
-	const carouselImages: DriveImage[] = [
-		...(modelImages && modelImages.length > 0
-			? modelImages
-			: product.imagen
-				? [{ id: product.imagen, name: product.nombre }]
-				: [{ id: "", name: "Imagen no disponible", placeholder: true }]),
-		{ id: "", name: "Guía de talles", url: SizeGuideImg },
+	const price = formatPrice(product);
+	const carouselImages: CarouselImage[] = [
+		...(product.imagenes.length > 0
+			? product.imagenes.map((src) => ({ src, name: product.nombre }))
+			: [{ src: "", name: "Imagen no disponible", placeholder: true }]),
+		{ src: SizeGuideImg, name: "Guía de talles" },
 	];
 
 	const sizes = productDetails?.talles
@@ -187,9 +182,9 @@ export default function Customizer({
 								{product.nombre}
 							</h4>
 							{/* Price */}
-							{product.precio && (
+							{price && (
 								<p className="text-2xl font-bold text-denim-blue tabular-nums">
-									{product.precio}
+									{price}
 								</p>
 							)}
 						</div>

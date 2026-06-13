@@ -1,0 +1,7 @@
+{
+	"nombre": "Doll",
+	"precio": 50000,
+	"descripcion": "Con su cuello Peter Pan y botonera al frente, evoca la dulzura de lo artesanal. Un guardapolvo que parece hecho con amor, porque lo es.",
+	"disponible": true,
+	"imagenes": ["/media/guardapolvos/doll.png"]
+}

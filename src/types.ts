@@ -1,14 +1,25 @@
 export interface Product {
 	nombre: string;
-	precio?: string;
-	imagen?: string;
+	/** Numeric price; formatted to es-AR at render. */
+	precio?: number;
+	/** Optional verbatim price override (e.g. "Consultar"); shown instead of `precio`. */
+	precioTexto?: string;
 	descripcion?: string;
-	talles?: string;
-	disponible?: string;
+	disponible: boolean;
+	/** Ordered list of public image paths (first is the primary card image). */
+	imagenes: string[];
 }
 
 export interface SmockData {
 	talles: string;
+}
+
+/** A renderable image for the product carousel. */
+export interface CarouselImage {
+	/** Resolved image URL. */
+	src: string;
+	name: string;
+	placeholder?: boolean;
 }
 
 export interface GalleryPhoto {

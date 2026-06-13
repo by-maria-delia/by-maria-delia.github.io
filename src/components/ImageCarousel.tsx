@@ -4,16 +4,15 @@ import "swiper/css";
 import "swiper/css/zoom";
 import { Zoom } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { driveImageUrl } from "../hooks/useDriveFolder";
 import useIsMobile from "../hooks/useIsMobile";
-import type { DriveImage } from "../types";
+import type { CarouselImage } from "../types";
 import { cn } from "../utils/cn";
 import ImagePlaceholder from "./ImagePlaceholder";
 
 const ZOOM = 2;
 
 interface ImageCarouselProps {
-	images: DriveImage[];
+	images: CarouselImage[];
 	productName: string;
 	className?: string;
 }
@@ -73,11 +72,12 @@ export default function ImageCarousel({
 						className="rounded-xl overflow-hidden aspect-4/3 bg-cream"
 					>
 						{images.map((image, i) => {
-							const imgSrc = image.url ?? driveImageUrl(image.id);
+							const imgSrc = image.src;
 							const isActive = i === activeIndex;
 							return (
 								<SwiperSlide
-									key={image.id || i}
+									// biome-ignore lint/suspicious/noArrayIndexKey: index is stable for a static images array
+									key={i}
 									className="flex items-center justify-center bg-cream"
 								>
 									{image.placeholder ? (

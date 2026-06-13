@@ -1,8 +1,6 @@
 name: Deploy to GitHub Pages
 
 on:
-  schedule:
-    - cron: "0 */6 * * *" # Every 6 hours
   workflow_dispatch: # Manual trigger
   push:
     branches: [main]
@@ -29,17 +27,8 @@ jobs:
 
       - run: yarn install --frozen-lockfile
 
-      - name: Prefetch data
-        run: node scripts/prefetch.mjs
-        env:
-          VITE_SHEET_CSV_URL: ${{ secrets.VITE_SHEET_CSV_URL }}
-          VITE_GOOGLE_DRIVE_API_KEY: ${{ secrets.VITE_GOOGLE_DRIVE_API_KEY }}
-          VITE_WSP_NUMBER: ${{ secrets.VITE_WSP_NUMBER }}
-
       - name: Build
-        run: yarn build:ci
-        env:
-          VITE_WSP_NUMBER: ${{ secrets.VITE_WSP_NUMBER }}
+        run: yarn build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4

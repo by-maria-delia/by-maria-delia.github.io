@@ -175,7 +175,7 @@ edit, and the change commits and auto-deploys to the live site.
 
 ---
 
-## Task 7: Remove Google pipeline + simplify CI `[ ]`
+## Task 7: Remove Google pipeline + simplify CI `[x]`
 
 Type: AFK
 Blocked by: Task 1, Task 2, Task 3, Task 4
@@ -191,11 +191,11 @@ design system and Customizer logic untouched.
 
 ### Acceptance criteria
 
-- [ ] Prefetch, create-stubs, `useGoogleSheet`, and `useDriveFolder` are removed.
-- [ ] Generated data JSON, the manifest, and `public/drive-images/` are removed.
-- [ ] Google env vars and Drive API key references are gone from code, `.env.example`, and CI.
-- [ ] The GitHub Action only builds and deploys on push (no cron, no prefetch step).
-- [ ] The site builds and deploys cleanly; storefront, Customizer, and gallery still work.
+- [x] Prefetch, create-stubs, `useGoogleSheet`, and `useDriveFolder` are removed.
+- [x] Generated data JSON, the manifest, and `public/drive-images/` are removed.
+- [x] Google env vars and Drive API key references are gone from code, `.env.example`, and CI.
+- [x] The GitHub Action only builds and deploys on push (no cron, no prefetch step).
+- [x] The site builds and deploys cleanly; storefront, Customizer, and gallery still work.
 
 ### Blocked by
 

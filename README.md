@@ -7,124 +7,92 @@ Custom smock (guardapolvo) catalog and ordering site for Maria Delia, a small ar
 - **React 19** + **TypeScript 5.9** + **Vite 7**
 - **Tailwind CSS 4** for styling
 - **Swiper** for image carousels
-- **PapaParse** for Google Sheets CSV parsing
+- **Sveltia CMS** for in-repo content editing
 - **ESLint** + **Biome** for linting/formatting
 - Deployed via **GitHub Pages**
 
 ## Data Flow
 
-Product data and images live in Google Sheets and Google Drive. The site fetches this data at **build time** so production serves fully static files with zero runtime API calls.
-
-### Pipeline
+All content lives in the repository under `src/content/` as JSON files, bundled at build time so production serves fully static files with **zero runtime API calls**. There is no Google Sheets or Google Drive dependency.
 
 ```
-Google Sheets (CSV)          Google Drive (folders)
-        |                            |
-        v                            v
-  ┌──────────────────────────────────────┐
-  │         scripts/prefetch.mjs         │
-  │  Runs at build time (yarn build)     │
-  └──────────┬───────────────────────────┘
-             |
-     ┌───────┼────────────────────┐
-     v       v                    v
-  src/data/*.json    public/drive-images/    src/data/drive-manifest.json
-  (metadata)         (downloaded images)     (fileId → extension map)
-     |
-     v
-  src/data/index.ts
-  (typed hooks with dev/prod switching)
-     |
-     v
-  Components render static data
-  Images served from local files
+src/content/                       public/media/
+  guardapolvos/*.json              (uploaded product/gallery images)
+  stamps/*.json
+  pockets/*.json
+  gallery/*.json
+  site.json                                |
+        |                                  |
+        v                                  v
+  src/content/*.ts loaders  ->  src/data/index.ts (typed hooks)
+        |
+        v
+  Components render static, in-repo data
 ```
 
-### Dev vs Prod
+Non-technical editors manage this content through **Sveltia CMS** at `/admin/`, which reads and writes the same `src/content/` files via the GitHub backend. Each save commits to the repo and triggers an auto-deploy. See `docs/cms-auth-setup.md` for CMS authentication setup.
 
-| | Development | Production |
+### Content shapes
+
+| Content | Location | Editable via CMS |
 |---|---|---|
-| **Sheet data** | Live fetch from Google Sheets | Static JSON from prefetch |
-| **Drive metadata** | Live fetch from Drive API | Static JSON from prefetch |
-| **Images** | Google Drive API URLs | Local files in `public/drive-images/` |
-
-The `driveImageUrl()` function handles this switch — in prod it returns local paths using the manifest, in dev it returns Drive API URLs.
-
-### Data Sources
-
-| Source | Type | Output |
-|---|---|---|
-| Products sheet (gid=0) | Google Sheets CSV | `products.json` |
-| Smocks sheet (gid=210216102) | Google Sheets CSV | `smocks.json` |
-| Gallery folder | Google Drive | `gallery.json` |
-| Stamps folder | Google Drive | `stamps.json` |
-| Border colors folder | Google Drive | `border-colors.json` |
-| Product images folder | Google Drive (multi-folder) | `product-images.json` |
+| Guardapolvos (name, price, override, available, images) | `src/content/guardapolvos/*.json` | Guardapolvos collection |
+| Stamps / prints | `src/content/stamps/*.json` | Stamps collection |
+| Pockets | `src/content/pockets/*.json` | Pockets collection |
+| Gallery photos (image, caption, visible) | `src/content/gallery/*.json` | Gallery collection |
+| Site copy + Instagram URL + WhatsApp number | `src/content/site.json` | Site Content singleton |
 
 ## Project Structure
 
 ```
 src/
-├── components/        UI components (Customizer, ProductCard, ImageCarousel, etc.)
-├── hooks/             useGoogleSheet, useDriveFolder, useIsMobile, useInView
-├── data/              Static JSON (generated) + index.ts (typed hook exports)
-├── assets/            Model images, brand assets, size guides
-├── utils/             cn() helper, WhatsApp URL builder
-├── types.ts           Shared TypeScript interfaces
-├── config.ts          Sheet GIDs + Drive folder IDs
-├── App.tsx            Root layout
-└── index.css          Tailwind + custom animations
+  components/        UI components (Customizer, ProductCard, ImageCarousel, etc.)
+  content/           In-repo content (JSON) + typed loaders (.ts)
+  data/              index.ts: typed hook exports over the content loaders
+  hooks/             useIsMobile, useInView
+  assets/            Model images, brand assets, size guides
+  utils/             cn() helper, WhatsApp URL builder
+  types.ts           Shared TypeScript interfaces
+  App.tsx            Root layout
+  index.css          Tailwind + custom animations
 
-scripts/
-├── prefetch.mjs       Build-time data + image fetcher
-└── create-stubs.mjs   Creates empty JSON stubs for fresh clones (postinstall)
+public/
+  admin/             Sveltia CMS (index.html + config.yml)
+  media/             Uploaded images (optimized to WebP by the CMS)
 ```
 
 ## Getting Started
 
-> **Note:** All `src/data/*.json` files and `public/drive-images/` are gitignored — they're generated by the prefetch script. On a fresh clone, `yarn install` creates empty stubs automatically (via `postinstall`) so TypeScript compiles before your first prefetch.
-
 ```bash
-# 1. Install dependencies (also creates data stubs via postinstall)
+# 1. Install dependencies
 yarn
 
-# 2. Set up environment variables
-cp .env.example .env
-# Fill in VITE_SHEET_CSV_URL, VITE_GOOGLE_DRIVE_API_KEY, VITE_WSP_NUMBER
-
-# 3. Fetch data from Google Sheets + Drive
-yarn prefetch
-
-# 4. Start dev server
+# 2. Start dev server
 yarn dev
 ```
+
+No environment variables or data-fetch step are required. Content is read straight from `src/content/`.
 
 ## Scripts
 
 | Script | Description |
 |---|---|
-| `yarn dev` | Start dev server (live data from Google APIs) |
-| `yarn prefetch` | Fetch sheets + drive data + download images |
-| `yarn build` | Prefetch + Vite production build |
-| `yarn build:ci` | Vite build only (skips prefetch — used in CI after prefetch step) |
+| `yarn dev` | Start dev server |
+| `yarn build` | Vite production build |
 | `yarn preview` | Preview production build locally |
 | `yarn lint` | Run ESLint |
 | `yarn deploy` | Build + deploy to GitHub Pages |
 
 ## Environment Variables
 
-| Variable | Description |
-|---|---|
-| `VITE_SHEET_CSV_URL` | Google Sheets "Publish to web" CSV URL (without `?gid=`) |
-| `VITE_GOOGLE_DRIVE_API_KEY` | Google Drive API key (needs Drive API enabled) |
-| `VITE_WSP_NUMBER` | WhatsApp number for orders (digits only) |
+None. The site is fully static and reads all content from in-repo files.
 
 ## Deployment
 
 CI runs via GitHub Actions (`.github/workflows/deploy.yml`):
 
-1. Triggers on push to `main`, every 6 hours (cron), or manually
-2. Installs deps, runs prefetch, builds with Vite
+1. Triggers on push to `main` (or manually via `workflow_dispatch`)
+2. Installs deps and builds with Vite
 3. Deploys `dist/` to GitHub Pages
 
-The 6-hour cron ensures the site picks up Google Sheets/Drive changes without manual deploys.
+Content edits made in the CMS commit to `main`, which triggers this workflow and publishes the change automatically.

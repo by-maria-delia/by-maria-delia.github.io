@@ -5,18 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prefetch": "node scripts/prefetch.mjs",
-    "build": "node scripts/prefetch.mjs && vite build",
-    "build:ci": "vite build",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "yarn build",
-    "deploy": "gh-pages -d dist",
-    "postinstall": "node scripts/create-stubs.mjs"
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "clsx": "^2.1.1",
-    "papaparse": "^5.5.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "swiper": "^12.1.2",
@@ -26,7 +22,6 @@
     "@biomejs/biome": "^2.4.7",
     "@eslint/js": "^9.39.1",
     "@tailwindcss/vite": "^4.1.18",
-    "@types/papaparse": "^5.5.2",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",

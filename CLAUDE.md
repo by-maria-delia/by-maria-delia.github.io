@@ -1,18 +1,17 @@
 # Maria Delia - Project Guide
 
 ## Stack
-React 19 + TypeScript 5.9 + Vite 7 + Tailwind CSS 4 + React Query (TanStack Query). Linting: ESLint + Biome. Deployed via gh-pages.
+React 19 + TypeScript 5.9 + Vite 7 + Tailwind CSS 4. Content authored in-repo and edited via Sveltia CMS. Linting: ESLint + Biome. Deployed via gh-pages.
 
 ## Commands
-- `yarn dev` — start dev server
-- `yarn build` — production build (prefetch + vite)
-- `yarn build:ci` — vite build only, used in CI after the prefetch step runs separately
-- `yarn lint` — run ESLint
-- `yarn deploy` — build + deploy to GitHub Pages
+- `yarn dev`: start dev server
+- `yarn build`: production build (vite)
+- `yarn lint`: run ESLint
+- `yarn deploy`: build + deploy to GitHub Pages
 
 ## Data Flow
-- Products and gallery data come from **Google Sheets CSV** exports, parsed with PapaParse via `useGoogleSheet<T>()`.
-- **React Query** manages all data fetching. Use aggressive caching (`staleTime`, `gcTime`) to minimize API hits against Google Sheets rate limits. Prefer long stale times since sheet data changes infrequently.
+- All content lives in-repo under `src/content/` as JSON, loaded by typed `.ts` loaders and exposed through hooks in `src/data/index.ts`. There are **zero runtime API calls** (no Google Sheets/Drive).
+- Non-technical editors manage content through **Sveltia CMS** at `/admin/` (GitHub backend); each save commits to `main` and auto-deploys. See `docs/cms-auth-setup.md`.
 - Products filter by `disponible === "TRUE"`, gallery by `visible === "TRUE"`.
 - Customizer modal collects size/pocket/print selections, then opens WhatsApp with a pre-filled message.
 
@@ -34,9 +33,9 @@ React 19 + TypeScript 5.9 + Vite 7 + Tailwind CSS 4 + React Query (TanStack Quer
 | Soft Gray | #666058 | Secondary text, muted labels (WCAG AA on all backgrounds) |
 
 ### Fonts (loaded from Google Fonts)
-- **Oooh Baby** — display/branding (hero title, logo)
-- **Nunito** — body text, navigation, UI
-- **Shadows Into Light** — handwritten accent (labels, badges)
+- **Oooh Baby**: display/branding (hero title, logo)
+- **Nunito**: body text, navigation, UI
+- **Shadows Into Light**: handwritten accent (labels, badges)
 
 ### Brand Personality
 Artesanal, calido, prolijo, clasico, amigable, docente, femenino. All copy in **Spanish (Argentina)**.
@@ -45,14 +44,10 @@ Artesanal, calido, prolijo, clasico, amigable, docente, femenino. All copy in **
 - Locale: `es-AR` for price formatting (`toLocaleString("es-AR")`)
 - Animations: FadeUp wrapper component + CSS keyframes (fade-up, fade-in, slide-down) with stagger delays
 - Responsive: mobile-first with md/lg breakpoints, hamburger menu on mobile
-- Env vars prefixed with `VITE_` (accessed via `import.meta.env`)
 - Vite base path: `/`
 
-## Environment Variables (.env)
-```
-VITE_WSP_NUMBER=...
-VITE_SHEET_CSV_URL=...
-```
+## Environment Variables
+None. The site is fully static and reads all content from in-repo files under `src/content/`.
 
 ## CodeSeeker MCP Tools - MANDATORY FOR CODE DISCOVERY
 
@@ -142,4 +137,3 @@ index({action: "sync", changes: [{type: "modified", path: "path/to/file"}]})
 - When something fails, ask "what context was missing?" not "the AI is broken"
 - Log failures mentally: prompt → context → outcome. Patterns will emerge.
 - Better input = better output. Always.
-

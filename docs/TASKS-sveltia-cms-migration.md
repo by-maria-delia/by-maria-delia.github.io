@@ -93,7 +93,7 @@ hidden photos never render.
 
 ---
 
-## Task 4: Site copy extracted into Site Content singleton `[ ]`
+## Task 4: Site copy extracted into Site Content singleton `[x]`
 
 Type: AFK
 Blocked by: Task 1
@@ -108,10 +108,10 @@ vars.
 
 ### Acceptance criteria
 
-- [ ] Hero, how-it-works, delivery, footer, and nav copy come from the Site Content singleton.
-- [ ] The Instagram URL and the WhatsApp number come from the singleton.
-- [ ] Changing a value in the singleton changes the rendered site, with no code edit.
-- [ ] No visible copy regressions versus the current site.
+- [x] Hero, how-it-works, delivery, footer, and nav copy come from the Site Content singleton.
+- [x] The Instagram URL and the WhatsApp number come from the singleton.
+- [x] Changing a value in the singleton changes the rendered site, with no code edit.
+- [x] No visible copy regressions versus the current site.
 
 ### Blocked by
 

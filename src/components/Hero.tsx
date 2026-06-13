@@ -1,6 +1,9 @@
+import { useSiteContent } from "../data";
 import FadeUp from "./FadeUp";
 
 export default function Hero() {
+	const { brandName, tagline, hero } = useSiteContent();
+
 	return (
 		<section className="relative overflow-hidden bg-spanish-white min-h-[85dvh] flex items-center px-4">
 			{/* Ambient background — soft radial gradients */}
@@ -12,35 +15,35 @@ export default function Hero() {
 			<div className="relative w-full max-w-3xl mx-auto">
 				<FadeUp>
 					<p className="mb-4 text-xl font-handwritten text-denim-blue">
-						Hechos a mano, pensados para vos
+						{hero.eyebrow}
 					</p>
 				</FadeUp>
 
 				<FadeUp delay={100}>
 					<h1 className="font-display text-7xl sm:text-8xl md:text-9xl text-denim-blue mb-6 leading-[0.9] tracking-tight">
-						Maria Delia
+						{brandName}
 					</h1>
 				</FadeUp>
 
 				<FadeUp delay={200}>
 					<p className="max-w-md mb-12 text-lg leading-relaxed md:text-xl text-denim-blue/80">
-						Guardapolvos artesanales y personalizables para maestras jardineras
+						{tagline}
 					</p>
 				</FadeUp>
 
 				<FadeUp delay={300}>
 					<div className="flex flex-col gap-4 sm:flex-row">
 						<a
-							href="#modelos"
+							href={hero.primaryCta.href}
 							className="btn-press inline-flex items-center justify-center bg-denim-blue text-white font-semibold px-8 py-3.5 rounded-lg hover:bg-denim-blue/90 hover:shadow-lg hover:shadow-denim-blue/20 transition-all"
 						>
-							Ver modelos
+							{hero.primaryCta.label}
 						</a>
 						<a
-							href="#como-encargar"
+							href={hero.secondaryCta.href}
 							className="btn-press inline-flex items-center justify-center border-2 border-denim-blue/25 text-denim-blue font-semibold px-8 py-3.5 rounded-lg hover:border-denim-blue/50 hover:bg-denim-blue/5 transition-all"
 						>
-							Cómo encargar
+							{hero.secondaryCta.label}
 						</a>
 					</div>
 				</FadeUp>

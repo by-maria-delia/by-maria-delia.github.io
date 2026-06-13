@@ -1,0 +1,60 @@
+{
+	"brandName": "Maria Delia",
+	"tagline": "Guardapolvos artesanales y personalizables para maestras jardineras",
+	"whatsappNumber": "5491138846277",
+	"instagramUrl": "https://instagram.com/mariadelia_guardapolvos",
+	"instagramHandle": "@mariadelia_guardapolvos",
+	"nav": {
+		"links": [
+			{ "label": "Modelos", "href": "#modelos" },
+			{ "label": "Cómo encargar", "href": "#como-encargar" },
+			{ "label": "Galería", "href": "#galeria" },
+			{ "label": "Contacto", "href": "#contacto" }
+		]
+	},
+	"hero": {
+		"eyebrow": "Hechos a mano, pensados para vos",
+		"primaryCta": { "label": "Ver modelos", "href": "#modelos" },
+		"secondaryCta": { "label": "Cómo encargar", "href": "#como-encargar" }
+	},
+	"howItWorks": {
+		"heading": "Cómo encargar",
+		"subheading": "En cuatro pasos simples tenés tu guardapolvo personalizado",
+		"steps": [
+			{
+				"title": "Elegí tu modelo",
+				"desc": "Explorá nuestros diseños y encontrá el que más te guste."
+			},
+			{
+				"title": "Personalizá",
+				"desc": "Elegí talle, bolsillo y estampado a tu gusto."
+			},
+			{
+				"title": "Enviá tu pedido",
+				"desc": "Nos contactás por WhatsApp con tu selección."
+			},
+			{
+				"title": "Recibí en casa",
+				"desc": "Lo confeccionamos a mano y te lo enviamos."
+			}
+		],
+		"footnote": "Cada guardapolvo se hace a pedido. Los tiempos de entrega pueden variar."
+	},
+	"gallery": {
+		"heading": "Nuestros trabajos",
+		"subheading": "Algunos modelos personalizados que ya entregamos"
+	},
+	"delivery": {
+		"heading": "Hecho a mano",
+		"paragraphs": [
+			"Cada guardapolvo se confecciona especialmente para vos.",
+			"Los tiempos de entrega pueden variar según demanda y modelo."
+		],
+		"footnote": "Gracias por elegir trabajo artesanal"
+	},
+	"footer": {
+		"whatsappLabel": "Consultas por WhatsApp",
+		"location": "Hecho en Argentina",
+		"copyright": "Todos los derechos reservados."
+	}
+}

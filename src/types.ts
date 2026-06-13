@@ -40,6 +40,49 @@ export interface GalleryPhoto {
 	visible: boolean;
 }
 
+/** A labelled link (nav item or hero call-to-action). */
+export interface NavLink {
+	label: string;
+	href: string;
+}
+
+/** All editable site copy and global values, loaded from a single in-repo singleton. */
+export interface SiteContent {
+	brandName: string;
+	/** Shared one-line description (hero subtitle and footer tagline). */
+	tagline: string;
+	/** Digits-only WhatsApp number used to build wa.me links. */
+	whatsappNumber: string;
+	instagramUrl: string;
+	instagramHandle: string;
+	nav: { links: NavLink[] };
+	hero: {
+		eyebrow: string;
+		primaryCta: NavLink;
+		secondaryCta: NavLink;
+	};
+	howItWorks: {
+		heading: string;
+		subheading: string;
+		steps: { title: string; desc: string }[];
+		footnote: string;
+	};
+	gallery: {
+		heading: string;
+		subheading: string;
+	};
+	delivery: {
+		heading: string;
+		paragraphs: string[];
+		footnote: string;
+	};
+	footer: {
+		whatsappLabel: string;
+		location: string;
+		copyright: string;
+	};
+}
+
 export interface WhatsAppParams {
 	model_name: string;
 	size: string;

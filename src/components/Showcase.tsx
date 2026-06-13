@@ -1,8 +1,9 @@
-import { useGalleryImages } from "../data";
+import { useGalleryImages, useSiteContent } from "../data";
 import FadeUp from "./FadeUp";
 
 export default function Showcase() {
 	const { images: galleryImages } = useGalleryImages();
+	const { gallery } = useSiteContent();
 
 	if (galleryImages.length === 0) return null;
 
@@ -11,10 +12,10 @@ export default function Showcase() {
 			<div className="max-w-6xl mx-auto">
 				<div className="text-center mb-14">
 					<h2 className="mb-3 text-4xl tracking-tight font-display md:text-5xl text-denim-blue">
-						Nuestros trabajos
+						{gallery.heading}
 					</h2>
 					<p className="max-w-md mx-auto text-soft-gray">
-						Algunos modelos personalizados que ya entregamos
+						{gallery.subheading}
 					</p>
 				</div>
 

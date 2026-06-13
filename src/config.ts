@@ -12,6 +12,3 @@ export const PRODUCTS_IMAGES_DRIVE_FOLDER_ID =
 export const GALLERY_DRIVE_FOLDER_ID = "1A5Wa_M-i2aXM4BCLA-xvLgzzGriQ3Na1";
 export const STAMPS_DRIVE_FOLDER_ID = "1oM-E5h_3KE63q5l3-_x3nYBeVCN6SE2k";
 export const POCKETS_DRIVE_FOLDER_ID = "1DFMeP9_eSUcTaHiV-ARux5bT4Tt3eVXI";
-
-export const WHATSAPP_NUMBER = import.meta.env.VITE_WSP_NUMBER;
-export const INSTAGRAM_URL = "https://instagram.com/mariadelia_guardapolvos";

@@ -1,4 +1,8 @@
+import { useSiteContent } from "../data";
+
 export default function DeliveryInfo() {
+	const { delivery } = useSiteContent();
+
 	return (
 		<section className="relative px-4 py-24 overflow-hidden bg-cream/50">
 			{/* Ambient gradient */}
@@ -24,16 +28,17 @@ export default function DeliveryInfo() {
 				</div>
 
 				<h2 className="mb-8 text-4xl tracking-tight font-display md:text-5xl text-denim-blue">
-					Hecho a mano
+					{delivery.heading}
 				</h2>
 
 				<div className="space-y-4 text-lg leading-relaxed text-dark-text/75">
-					<p>Cada guardapolvo se confecciona especialmente para vos.</p>
-					<p>Los tiempos de entrega pueden variar según demanda y modelo.</p>
+					{delivery.paragraphs.map((paragraph) => (
+						<p key={paragraph}>{paragraph}</p>
+					))}
 				</div>
 
 				<p className="mt-8 text-xl font-handwritten text-denim-blue/70">
-					Gracias por elegir trabajo artesanal
+					{delivery.footnote}
 				</p>
 			</div>
 		</section>

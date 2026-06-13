@@ -1,14 +1,11 @@
+import { pockets, stamps } from "../content/options";
 import { products, productsDetails } from "../content/products";
 import useDriveFolder from "../hooks/useDriveFolder";
 import type { DriveFolderType, DriveImage } from "../types";
 import galleryJson from "./gallery.json";
-import pocketsJson from "./pockets.json";
-import stampsJson from "./stamps.json";
 
-// Static data from build-time prefetch (gallery/stamps/pockets still on Drive)
+// Static data from build-time prefetch (gallery still on Drive)
 const staticGalleryImages = galleryJson.data as DriveImage[];
-const staticStampImages = stampsJson.data as DriveImage[];
-const staticPocketsImages = pocketsJson.data as DriveImage[];
 
 /** Guardapolvos read from in-repo content; no network requests. */
 export const useProducts = () => ({
@@ -36,8 +33,8 @@ function useDriveFolderDev(type: DriveFolderType, fallback: DriveImage[]) {
 export const useGalleryImages = () =>
 	useDriveFolderDev("gallery", staticGalleryImages);
 
-export const useStampImages = () =>
-	useDriveFolderDev("stamps", staticStampImages);
+/** Global stamp (print) options read from in-repo content; no network requests. */
+export const useStampImages = () => ({ images: stamps });
 
-export const usePocketsImages = () =>
-	useDriveFolderDev("pockets", staticPocketsImages);
+/** Global pocket options read from in-repo content; no network requests. */
+export const usePocketsImages = () => ({ images: pockets });

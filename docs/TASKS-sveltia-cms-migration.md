@@ -42,7 +42,7 @@ None, can start immediately.
 
 ---
 
-## Task 2: Customizer renders from in-repo content `[ ]`
+## Task 2: Customizer renders from in-repo content `[x]`
 
 Type: AFK
 Blocked by: Task 1
@@ -57,11 +57,11 @@ The WhatsApp message format and the size guide are unchanged.
 
 ### Acceptance criteria
 
-- [ ] Sizes, stamps, and pockets are seeded as in-repo content and load via the ported hooks.
-- [ ] The Customizer shows the global sizes, stamps, and pockets from the repo.
-- [ ] Selecting size/pocket/stamp/comments composes the same WhatsApp URL as before.
-- [ ] The size guide still displays.
-- [ ] No Google requests are made by the Customizer.
+- [x] Sizes, stamps, and pockets are seeded as in-repo content and load via the ported hooks.
+- [x] The Customizer shows the global sizes, stamps, and pockets from the repo.
+- [x] Selecting size/pocket/stamp/comments composes the same WhatsApp URL as before.
+- [x] The size guide still displays.
+- [x] No Google requests are made by the Customizer.
 
 ### Blocked by
 

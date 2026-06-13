@@ -14,6 +14,14 @@ export interface SmockData {
 	talles: string;
 }
 
+/** A global Customizer option (stamp or pocket) rendered as a selectable thumbnail. */
+export interface OptionImage {
+	/** Display name; also the value sent in the WhatsApp message. */
+	nombre: string;
+	/** Public image path (e.g. `/media/stamps/estampa-00.jpg`). */
+	imagen: string;
+}
+
 /** A renderable image for the product carousel. */
 export interface CarouselImage {
 	/** Resolved image URL. */

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import SizeGuideImg from "../assets/sizes_guide.png";
 import { usePocketsImages, useProductsDetails, useStampImages } from "../data";
-import { driveImageUrl } from "../hooks/useDriveFolder";
 import useIsMobile from "../hooks/useIsMobile";
 import type { CarouselImage, Product } from "../types";
 import { cn } from "../utils/cn";
@@ -13,12 +12,6 @@ interface CustomizerProps {
 	product: Product;
 	onClose: () => void;
 }
-
-const formatImageName = (name: string) =>
-	name
-		.replace(/\.[^.]+$/, "")
-		.replace(/-/g, " ")
-		.replace(/\b\w/g, (c) => c.toUpperCase());
 
 export default function Customizer({ product, onClose }: CustomizerProps) {
 	const [size, setSize] = useState("");
@@ -235,11 +228,11 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 									})}
 								>
 									{pocketsImages.map((image) => {
-										const displayName = formatImageName(image.name);
+										const displayName = image.nombre;
 										return (
 											<button
 												type="button"
-												key={image.id}
+												key={image.nombre}
 												onClick={() => setPockets(displayName)}
 												className={cn(
 													"btn-press relative rounded-xl border-2 overflow-hidden transition-all shrink-0 h-fit max-w-28 cursor-pointer",
@@ -267,7 +260,7 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 												)}
 												<div className="bg-cream">
 													<img
-														src={driveImageUrl(image.id)}
+														src={image.imagen}
 														alt={displayName}
 														loading="lazy"
 														className="object-contain w-full h-full"
@@ -288,11 +281,11 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 								</legend>
 								<div className="flex gap-3 overflow-x-scroll py-2.5 px-1 custom-scrollbar">
 									{stampImages.map((image) => {
-										const displayName = formatImageName(image.name);
+										const displayName = image.nombre;
 										return (
 											<button
 												type="button"
-												key={image.id}
+												key={image.nombre}
 												onClick={() => setEstampado(displayName)}
 												className={cn(
 													"btn-press relative rounded-xl border-2 overflow-hidden transition-all cursor-pointer shrink-0 w-28",
@@ -320,7 +313,7 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 												)}
 												<div className="aspect-square bg-cream">
 													<img
-														src={driveImageUrl(image.id)}
+														src={image.imagen}
 														alt={displayName}
 														loading="lazy"
 														className="object-cover w-full h-full"

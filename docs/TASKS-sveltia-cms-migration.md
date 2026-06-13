@@ -119,7 +119,7 @@ vars.
 
 ---
 
-## Task 5: Sveltia admin scaffolded + config `[ ]`
+## Task 5: Sveltia admin scaffolded + config `[x]`
 
 Type: AFK
 Blocked by: Task 1, Task 2, Task 3, Task 4
@@ -136,11 +136,11 @@ Task 6, but the config and collection editing UI are authored here.
 
 ### Acceptance criteria
 
-- [ ] `/admin/` loads the Sveltia UI.
-- [ ] `config.yml` defines collections/singleton matching the Task 1 to 4 content shapes.
-- [ ] Field types are correct (numeric price, optional override, booleans, ordered image lists).
-- [ ] Image uploads target the in-repo media folder and are optimized to WebP.
-- [ ] The GitHub backend is configured (login itself is exercised in Task 6).
+- [x] `/admin/` loads the Sveltia UI.
+- [x] `config.yml` defines collections/singleton matching the Task 1 to 4 content shapes.
+- [x] Field types are correct (numeric price, optional override, booleans, ordered image lists).
+- [x] Image uploads target the in-repo media folder and are optimized to WebP.
+- [x] The GitHub backend is configured (login itself is exercised in Task 6).
 
 ### Blocked by
 

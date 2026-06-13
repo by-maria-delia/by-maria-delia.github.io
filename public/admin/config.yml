@@ -1,0 +1,229 @@
+# Sveltia CMS configuration for Maria Delia.
+#
+# Describes every in-repo content shape created in Tasks 1 to 4:
+#   - guardapolvos  -> src/content/guardapolvos/*.json   (Product)
+#   - gallery       -> src/content/gallery/*.json         (GalleryPhoto)
+#   - estampas      -> src/content/stamps/*.json          (OptionImage)
+#   - bolsillos     -> src/content/pockets/*.json         (OptionImage)
+#   - sitio         -> src/content/site.json              (SiteContent singleton)
+#   - talles        -> src/content/detalles.json          (SmockData singleton)
+#
+# Login is exercised in Task 6 (the Cloudflare Worker OAuth `base_url` is wired
+# in then). Field types and the editing UI are authored here.
+
+backend:
+  name: github
+  repo: by-maria-delia/maria-delia-website
+  branch: main
+  # Set in Task 6 to the deployed sveltia-cms-auth Cloudflare Worker URL, e.g.
+  # base_url: https://maria-delia-cms-auth.workers.dev
+
+# Uploaded images are committed into the repo and auto-optimized to WebP.
+media_folder: "/public/media"
+public_folder: "/media"
+
+media_libraries:
+  default:
+    config:
+      transformations:
+        raster_image:
+          format: webp
+          quality: 85
+          width: 2048
+          height: 2048
+
+# Spanish (Argentina) UI labels throughout.
+locale: es
+
+collections:
+  # --- Task 1: Guardapolvos ----------------------------------------------------
+  - name: guardapolvos
+    label: "Guardapolvos"
+    label_singular: "Guardapolvo"
+    description: "Catálogo de modelos. Solo los disponibles aparecen en la tienda."
+    folder: "src/content/guardapolvos"
+    extension: "json"
+    format: "json"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: nombre
+    summary: "{{fields.nombre}}{{#if fields.disponible}}{{else}} (oculto){{/if}}"
+    sortable_fields: [nombre, precio, disponible]
+    fields:
+      - { name: nombre, label: "Nombre", widget: string }
+      - name: precio
+        label: "Precio"
+        widget: number
+        required: false
+        value_type: int
+        min: 0
+        hint: "Precio numérico en pesos. Se muestra formateado (ej. $50.000,00). Dejalo vacío si usás el texto alternativo."
+      - name: precioTexto
+        label: "Precio (texto alternativo)"
+        widget: string
+        required: false
+        hint: "Si lo completás, se muestra tal cual en lugar del precio numérico (ej. \"Consultar\")."
+      - { name: descripcion, label: "Descripción", widget: text, required: false }
+      - name: disponible
+        label: "Disponible"
+        widget: boolean
+        default: true
+        hint: "Si está apagado, el modelo no aparece en la tienda."
+      - name: imagenes
+        label: "Imágenes"
+        label_singular: "Imagen"
+        widget: list
+        required: false
+        hint: "Lista ordenada. La primera es la imagen principal de la tarjeta."
+        field: { name: imagen, label: "Imagen", widget: image }
+        media_folder: "/public/media/guardapolvos"
+        public_folder: "/media/guardapolvos"
+
+  # --- Task 3: Galería ---------------------------------------------------------
+  - name: gallery
+    label: "Galería"
+    label_singular: "Foto"
+    description: "Sección \"Nuestros trabajos\". Solo las fotos visibles se muestran."
+    folder: "src/content/gallery"
+    extension: "json"
+    format: "json"
+    create: true
+    slug: "{{slug}}"
+    summary: "{{#if fields.descripcion}}{{fields.descripcion}}{{else}}{{fields.imagen}}{{/if}}"
+    fields:
+      - name: imagen
+        label: "Imagen"
+        widget: image
+        media_folder: "/public/media/gallery"
+        public_folder: "/media/gallery"
+      - { name: descripcion, label: "Descripción", widget: string, required: false, hint: "Opcional. También se usa como texto alternativo de la imagen." }
+      - { name: visible, label: "Visible", widget: boolean, default: true }
+
+  # --- Task 2: Estampas (Customizer) -------------------------------------------
+  - name: estampas
+    label: "Estampas"
+    label_singular: "Estampa"
+    description: "Galería de estampados global del personalizador."
+    folder: "src/content/stamps"
+    extension: "json"
+    format: "json"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: nombre
+    summary: "{{fields.nombre}}"
+    fields:
+      - { name: nombre, label: "Nombre", widget: string, hint: "También es el valor enviado en el mensaje de WhatsApp." }
+      - name: imagen
+        label: "Imagen"
+        widget: image
+        media_folder: "/public/media/stamps"
+        public_folder: "/media/stamps"
+
+  # --- Task 2: Bolsillos (Customizer) ------------------------------------------
+  - name: bolsillos
+    label: "Bolsillos"
+    label_singular: "Bolsillo"
+    description: "Galería de bolsillos global del personalizador."
+    folder: "src/content/pockets"
+    extension: "json"
+    format: "json"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: nombre
+    summary: "{{fields.nombre}}"
+    fields:
+      - { name: nombre, label: "Nombre", widget: string, hint: "También es el valor enviado en el mensaje de WhatsApp." }
+      - name: imagen
+        label: "Imagen"
+        widget: image
+        media_folder: "/public/media/pockets"
+        public_folder: "/media/pockets"
+
+  # --- Tasks 2 & 4: Singletons -------------------------------------------------
+  - name: configuracion
+    label: "Configuración del sitio"
+    files:
+      # Task 4: Site Content singleton.
+      - name: sitio
+        label: "Contenido y datos del sitio"
+        file: "src/content/site.json"
+        description: "Textos del sitio, número de WhatsApp y enlaces de Instagram."
+        fields:
+          - { name: brandName, label: "Nombre de marca", widget: string }
+          - { name: tagline, label: "Eslogan", widget: string, hint: "Subtítulo del hero y bajada del pie de página." }
+          - { name: whatsappNumber, label: "Número de WhatsApp", widget: string, hint: "Solo dígitos, ej. 5491138846277." }
+          - { name: instagramUrl, label: "URL de Instagram", widget: string }
+          - { name: instagramHandle, label: "Usuario de Instagram", widget: string }
+          - name: nav
+            label: "Navegación"
+            widget: object
+            fields:
+              - name: links
+                label: "Enlaces"
+                label_singular: "Enlace"
+                widget: list
+                fields:
+                  - { name: label, label: "Texto", widget: string }
+                  - { name: href, label: "Destino", widget: string }
+          - name: hero
+            label: "Hero"
+            widget: object
+            fields:
+              - { name: eyebrow, label: "Antetítulo", widget: string }
+              - name: primaryCta
+                label: "Botón principal"
+                widget: object
+                fields:
+                  - { name: label, label: "Texto", widget: string }
+                  - { name: href, label: "Destino", widget: string }
+              - name: secondaryCta
+                label: "Botón secundario"
+                widget: object
+                fields:
+                  - { name: label, label: "Texto", widget: string }
+                  - { name: href, label: "Destino", widget: string }
+          - name: howItWorks
+            label: "Cómo encargar"
+            widget: object
+            fields:
+              - { name: heading, label: "Título", widget: string }
+              - { name: subheading, label: "Subtítulo", widget: string }
+              - name: steps
+                label: "Pasos"
+                label_singular: "Paso"
+                widget: list
+                fields:
+                  - { name: title, label: "Título", widget: string }
+                  - { name: desc, label: "Descripción", widget: text }
+              - { name: footnote, label: "Nota al pie", widget: text }
+          - name: gallery
+            label: "Galería (encabezado)"
+            widget: object
+            fields:
+              - { name: heading, label: "Título", widget: string }
+              - { name: subheading, label: "Subtítulo", widget: string }
+          - name: delivery
+            label: "Entrega / hecho a mano"
+            widget: object
+            fields:
+              - { name: heading, label: "Título", widget: string }
+              - name: paragraphs
+                label: "Párrafos"
+                label_singular: "Párrafo"
+                widget: list
+                field: { name: parrafo, label: "Párrafo", widget: text }
+              - { name: footnote, label: "Nota al pie", widget: string }
+          - name: footer
+            label: "Pie de página"
+            widget: object
+            fields:
+              - { name: whatsappLabel, label: "Etiqueta WhatsApp", widget: string }
+              - { name: location, label: "Ubicación", widget: string }
+              - { name: copyright, label: "Copyright", widget: string }
+      # Task 2: global sizes list shown in the Customizer.
+      - name: talles
+        label: "Talles"
+        file: "src/content/detalles.json"
+        description: "Lista de talles del personalizador."
+        fields:
+          - { name: talles, label: "Talles", widget: string, hint: "Separados por coma, ej. XS,S,M,L,XL,XXL,XXXL." }

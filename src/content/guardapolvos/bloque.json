@@ -1,7 +1,7 @@
 {
   "nombre": "Bloquete",
   "precio": 50000,
-  "precioTexto": "",
+  "precioTexto": "Consulte Precio",
   "descripcion": "Arquitectura hecha tela. Su diseño limpio y definido habla de una mujer segura, práctica y con estilo propio.",
   "disponible": true,
   "imagenes": [

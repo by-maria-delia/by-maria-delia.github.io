@@ -1,24 +1,18 @@
-import { driveImageUrl } from "../hooks/useDriveFolder";
-import type { DriveImage, Product } from "../types";
+import type { Product } from "../types";
+import { formatPrice } from "../utils/formatPrice";
 import ImagePlaceholder from "./ImagePlaceholder";
 
 interface ProductCardProps {
 	product: Product;
-	modelImages?: DriveImage[];
 	onCustomize: (product: Product) => void;
 }
 
 export default function ProductCard({
 	product,
-	modelImages,
 	onCustomize,
 }: ProductCardProps) {
-	const imageSrc =
-		modelImages && modelImages.length > 0
-			? driveImageUrl(modelImages[0].id)
-			: product.imagen
-				? driveImageUrl(product.imagen)
-				: null;
+	const imageSrc = product.imagenes[0] ?? null;
+	const price = formatPrice(product);
 
 	return (
 		<div className="flex flex-col overflow-hidden transition-all border group bg-soft-white rounded-xl border-denim-blue/8 hover:border-school-blue/25 hover:shadow-lg hover:shadow-school-blue/8">
@@ -41,9 +35,9 @@ export default function ProductCard({
 				</h3>
 
 				<div className="mt-auto">
-					{product.precio && (
+					{price && (
 						<p className="mb-3 text-base md:text-lg font-bold text-denim-blue tabular-nums">
-							{product.precio}
+							{price}
 						</p>
 					)}
 					<button

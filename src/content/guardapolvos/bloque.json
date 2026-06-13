@@ -1,0 +1,7 @@
+{
+	"nombre": "Bloque",
+	"precio": 50000,
+	"descripcion": "Arquitectura hecha tela. Su diseño limpio y definido habla de una mujer segura, práctica y con estilo propio.",
+	"disponible": true,
+	"imagenes": ["/media/guardapolvos/bloque.png"]
+}

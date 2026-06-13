@@ -1,30 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import SizeGuideImg from "../assets/sizes_guide.png";
 import { usePocketsImages, useProductsDetails, useStampImages } from "../data";
-import { driveImageUrl } from "../hooks/useDriveFolder";
 import useIsMobile from "../hooks/useIsMobile";
-import type { DriveImage, Product } from "../types";
+import type { CarouselImage, Product } from "../types";
 import { cn } from "../utils/cn";
+import { formatPrice } from "../utils/formatPrice";
 import { buildWhatsAppURL } from "../utils/whatsapp";
 import ImageCarousel from "./ImageCarousel";
 
 interface CustomizerProps {
 	product: Product;
-	modelImages?: DriveImage[];
 	onClose: () => void;
 }
 
-const formatImageName = (name: string) =>
-	name
-		.replace(/\.[^.]+$/, "")
-		.replace(/-/g, " ")
-		.replace(/\b\w/g, (c) => c.toUpperCase());
-
-export default function Customizer({
-	product,
-	modelImages,
-	onClose,
-}: CustomizerProps) {
+export default function Customizer({ product, onClose }: CustomizerProps) {
 	const [size, setSize] = useState("");
 	const [pockets, setPockets] = useState("");
 	const [estampado, setEstampado] = useState("");
@@ -35,13 +24,12 @@ export default function Customizer({
 	const { images: stampImages } = useStampImages();
 	const { images: pocketsImages } = usePocketsImages();
 	const { data: productDetails } = useProductsDetails();
-	const carouselImages: DriveImage[] = [
-		...(modelImages && modelImages.length > 0
-			? modelImages
-			: product.imagen
-				? [{ id: product.imagen, name: product.nombre }]
-				: [{ id: "", name: "Imagen no disponible", placeholder: true }]),
-		{ id: "", name: "Guía de talles", url: SizeGuideImg },
+	const price = formatPrice(product);
+	const carouselImages: CarouselImage[] = [
+		...(product.imagenes.length > 0
+			? product.imagenes.map((src) => ({ src, name: product.nombre }))
+			: [{ src: "", name: "Imagen no disponible", placeholder: true }]),
+		{ src: SizeGuideImg, name: "Guía de talles" },
 	];
 
 	const sizes = productDetails?.talles
@@ -187,9 +175,9 @@ export default function Customizer({
 								{product.nombre}
 							</h4>
 							{/* Price */}
-							{product.precio && (
+							{price && (
 								<p className="text-2xl font-bold text-denim-blue tabular-nums">
-									{product.precio}
+									{price}
 								</p>
 							)}
 						</div>
@@ -240,11 +228,11 @@ export default function Customizer({
 									})}
 								>
 									{pocketsImages.map((image) => {
-										const displayName = formatImageName(image.name);
+										const displayName = image.nombre;
 										return (
 											<button
 												type="button"
-												key={image.id}
+												key={image.nombre}
 												onClick={() => setPockets(displayName)}
 												className={cn(
 													"btn-press relative rounded-xl border-2 overflow-hidden transition-all shrink-0 h-fit max-w-28 cursor-pointer",
@@ -272,7 +260,7 @@ export default function Customizer({
 												)}
 												<div className="bg-cream">
 													<img
-														src={driveImageUrl(image.id)}
+														src={image.imagen}
 														alt={displayName}
 														loading="lazy"
 														className="object-contain w-full h-full"
@@ -293,11 +281,11 @@ export default function Customizer({
 								</legend>
 								<div className="flex gap-3 overflow-x-scroll py-2.5 px-1 custom-scrollbar">
 									{stampImages.map((image) => {
-										const displayName = formatImageName(image.name);
+										const displayName = image.nombre;
 										return (
 											<button
 												type="button"
-												key={image.id}
+												key={image.nombre}
 												onClick={() => setEstampado(displayName)}
 												className={cn(
 													"btn-press relative rounded-xl border-2 overflow-hidden transition-all cursor-pointer shrink-0 w-28",
@@ -325,7 +313,7 @@ export default function Customizer({
 												)}
 												<div className="aspect-square bg-cream">
 													<img
-														src={driveImageUrl(image.id)}
+														src={image.imagen}
 														alt={displayName}
 														loading="lazy"
 														className="object-cover w-full h-full"

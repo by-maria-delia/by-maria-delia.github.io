@@ -1,0 +1,10 @@
+{
+	"nombre": "Globo",
+	"precio": 65000,
+	"descripcion": "Suave, redondeada y llena de ternura. Su silueta envolvente abraza con comodidad y estilo en cada momento del día.",
+	"disponible": true,
+	"imagenes": [
+		"/media/guardapolvos/globo-1.png",
+		"/media/guardapolvos/globo-2.png"
+	]
+}

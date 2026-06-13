@@ -1,4 +1,4 @@
-import { WHATSAPP_NUMBER } from "../config";
+import { siteContent } from "../content/site";
 import type { WhatsAppParams } from "../types";
 
 export function buildWhatsAppURL({
@@ -21,5 +21,5 @@ export function buildWhatsAppURL({
 	}
 
 	const message = encodeURIComponent(lines.join("\n"));
-	return `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+	return `https://wa.me/${siteContent.whatsappNumber}?text=${message}`;
 }

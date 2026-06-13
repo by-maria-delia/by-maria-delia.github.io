@@ -1,14 +1,10 @@
 import { useState } from "react";
+import { useSiteContent } from "../data";
 
 export default function Navbar() {
 	const [menuOpen, setMenuOpen] = useState(false);
-
-	const links = [
-		{ label: "Modelos", href: "#modelos" },
-		{ label: "Cómo encargar", href: "#como-encargar" },
-		{ label: "Galería", href: "#galeria" },
-		{ label: "Contacto", href: "#contacto" },
-	];
+	const { brandName, nav } = useSiteContent();
+	const links = nav.links;
 
 	return (
 		<nav className="sticky top-0 z-50 border-b bg-soft-white/85 backdrop-blur-md border-denim-blue/10">
@@ -17,7 +13,7 @@ export default function Navbar() {
 					href="/"
 					className="text-2xl tracking-tight transition-colors font-display text-denim-blue hover:text-teacher-pink"
 				>
-					Maria Delia
+					{brandName}
 				</a>
 
 				{/* Desktop links */}

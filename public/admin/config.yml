@@ -48,7 +48,7 @@ collections:
     create: true
     slug: "{{slug}}"
     identifier_field: nombre
-    summary: "{{fields.nombre}}{{#if fields.disponible}}{{else}} (oculto){{/if}}"
+    summary: "{{fields.nombre}}{{fields.disponible | ternary('',' (oculto)')}}"
     sortable_fields: [nombre, precio, disponible]
     fields:
       - { name: nombre, label: "Nombre", widget: string }
@@ -90,7 +90,7 @@ collections:
     format: "json"
     create: true
     slug: "{{slug}}"
-    summary: "{{#if fields.descripcion}}{{fields.descripcion}}{{else}}{{fields.imagen}}{{/if}}"
+    summary: "{{fields.descripcion | default('(foto sin descripción)')}}"
     fields:
       - name: imagen
         label: "Imagen"

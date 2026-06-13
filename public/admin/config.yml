@@ -15,8 +15,9 @@ backend:
   name: github
   repo: by-maria-delia/maria-delia-website
   branch: main
-  # Set in Task 6 to the deployed sveltia-cms-auth Cloudflare Worker URL, e.g.
-  # base_url: https://maria-delia-cms-auth.workers.dev
+  # OAuth via a self-hosted sveltia-cms-auth Cloudflare Worker.
+  # Setup steps: docs/cms-auth-setup.md.
+  base_url: https://sveltia-cms-auth.st-website-builder-webhook.workers.dev
 
 # Uploaded images are committed into the repo and auto-optimized to WebP.
 media_folder: "/public/media"

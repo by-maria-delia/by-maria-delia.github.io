@@ -303,22 +303,34 @@
 		};
 	}
 
-	// Respaldo: observar el toast de exito de Sveltia.
+	// Respaldo: detectar cuando el toast de exito de Sveltia se vuelve visible.
+	// Los toasts viven SIEMPRE en el DOM, ocultos con aria-hidden="true"; por eso
+	// no alcanza con observar nodos agregados (eso disparaba en cada carga de la
+	// pagina). Lo que importa es la transicion aria-hidden true -> visible.
 	function installToastObserver() {
 		var rx = /(publicad|guardad|published|saved)/i;
 		var obs = new MutationObserver(function (mutations) {
 			for (var i = 0; i < mutations.length; i++) {
-				var nodes = mutations[i].addedNodes;
-				for (var j = 0; j < nodes.length; j++) {
-					var n = nodes[j];
-					if (n.nodeType === 1 && rx.test(n.textContent || "")) {
-						onSaveDetected();
-						return;
-					}
+				var m = mutations[i];
+				if (m.type !== "attributes" || m.attributeName !== "aria-hidden") {
+					continue;
+				}
+				var el = m.target;
+				if (!el || el.nodeType !== 1) continue;
+				var nowVisible = el.getAttribute("aria-hidden") !== "true";
+				var wasHidden = m.oldValue === "true";
+				if (nowVisible && wasHidden && rx.test(el.textContent || "")) {
+					onSaveDetected();
+					return;
 				}
 			}
 		});
-		obs.observe(document.body, { childList: true, subtree: true });
+		obs.observe(document.body, {
+			attributes: true,
+			attributeFilter: ["aria-hidden"],
+			attributeOldValue: true,
+			subtree: true,
+		});
 	}
 
 	// --- arranque -----------------------------------------------------------

@@ -30,11 +30,14 @@ export interface CarouselImage {
 	placeholder?: boolean;
 }
 
+/** A gallery photo shown in the "Nuestros trabajos" section. */
 export interface GalleryPhoto {
-	id?: string;
+	/** Public image path (e.g. `/media/gallery/trabajo-00.png`). */
 	imagen: string;
+	/** Optional caption; also used as the image alt text. */
 	descripcion?: string;
-	visible?: string;
+	/** Only visible photos render in the storefront. */
+	visible: boolean;
 }
 
 export interface WhatsAppParams {

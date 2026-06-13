@@ -1,5 +1,4 @@
 import { useGalleryImages } from "../data";
-import { driveImageUrl } from "../hooks/useDriveFolder";
 import FadeUp from "./FadeUp";
 
 export default function Showcase() {
@@ -23,13 +22,13 @@ export default function Showcase() {
 				<div className="gap-4 space-y-4 columns-2 md:columns-3">
 					{galleryImages.map((image, idx) => (
 						<FadeUp
-							key={image.id}
+							key={image.imagen}
 							delay={Math.min(idx, 4) * 80}
 							className="group relative break-inside-avoid rounded-xl overflow-hidden bg-cream"
 						>
 							<img
-								src={driveImageUrl(image.id)}
-								alt={image.name}
+								src={image.imagen}
+								alt={image.descripcion || "Trabajo de María Delia"}
 								loading="lazy"
 								className="w-full h-auto object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
 							/>

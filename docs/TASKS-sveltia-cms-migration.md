@@ -69,7 +69,7 @@ The WhatsApp message format and the size guide are unchanged.
 
 ---
 
-## Task 3: Gallery renders from in-repo content `[ ]`
+## Task 3: Gallery renders from in-repo content `[x]`
 
 Type: AFK
 Blocked by: Task 1
@@ -82,10 +82,10 @@ hidden photos never render.
 
 ### Acceptance criteria
 
-- [ ] Gallery photos are seeded as in-repo content with caption and visibility.
-- [ ] `useGalleryImages` reads in-repo content and keeps its return shape.
-- [ ] Only `visible` photos appear in the gallery.
-- [ ] No Google requests are made by the gallery.
+- [x] Gallery photos are seeded as in-repo content with caption and visibility.
+- [x] `useGalleryImages` reads in-repo content and keeps its return shape.
+- [x] Only `visible` photos appear in the gallery.
+- [x] No Google requests are made by the gallery.
 
 ### Blocked by
 

@@ -13,7 +13,7 @@
 
 backend:
   name: github
-  repo: by-maria-delia/maria-delia-website
+  repo: by-maria-delia/by-maria-delia.github.io
   branch: main
   # OAuth via a self-hosted sveltia-cms-auth Cloudflare Worker.
   # Setup steps: docs/cms-auth-setup.md.

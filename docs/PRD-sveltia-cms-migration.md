@@ -128,7 +128,7 @@ render, and confirm an Editor edit in the CMS commits and deploys end to end.
 
 ## Further Notes
 
-- Two setup steps require the owner/developer out of band: (1) create a GitHub OAuth App and deploy the sveltia-cms-auth Cloudflare Worker (free), and (2) grant the Editor's GitHub account write access to `by-maria-delia/maria-delia-website`. Both should be documented in the repo for repeatability.
+- Two setup steps require the owner/developer out of band: (1) create a GitHub OAuth App and deploy the sveltia-cms-auth Cloudflare Worker (free), and (2) grant the Editor's GitHub account write access to `by-maria-delia/by-maria-delia.github.io`. Both should be documented in the repo for repeatability.
 - Because content and images are versioned in git, every change is revertable and auditable, which is a meaningful safety net for a non-technical Editor.
 - The decision and its trade-offs are recorded in `docs/adr/0001-sveltia-cms-replaces-google-sheets.md`. The domain language used throughout is defined in `CONTEXT.md`.
 - Suggested task slices for `/to-issues`: (a) scaffold Sveltia admin + config, (b) define content collections + seed real data, (c) port the data hooks to read in-repo content, (d) price formatting + override, (e) extract site copy into Site Content, (f) remove the Google pipeline + simplify CI, (g) OAuth/Worker setup + docs.

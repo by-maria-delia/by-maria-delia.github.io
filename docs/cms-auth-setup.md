@@ -9,7 +9,7 @@ recorded here so the setup is repeatable.
 
 Key facts for this project:
 
-- Repo: `by-maria-delia/maria-delia-website`
+- Repo: `by-maria-delia/by-maria-delia.github.io`
 - Live site host: `by-maria-delia.github.io`
 - Admin URL: `https://by-maria-delia.github.io/admin/`
 - Content branch (where CMS commits land and what triggers deploy): `main`
@@ -65,7 +65,7 @@ In `public/admin/config.yml`, set the backend `base_url` to the Worker origin
 ```yaml
 backend:
   name: github
-  repo: by-maria-delia/maria-delia-website
+  repo: by-maria-delia/by-maria-delia.github.io
   branch: main
   base_url: https://sveltia-cms-auth.<your-subdomain>.workers.dev
 ```
@@ -126,5 +126,10 @@ live at `https://by-maria-delia.github.io/admin/`.
   URL must be exactly `https://<WORKER_URL>/callback`. Re-check Step 1/2.
 - **Logged in but saves fail:** the GitHub account lacks **Write** access to the
   repo (Step 5), or `base_url`/`repo`/`branch` in `config.yml` is wrong (Step 4).
+- **Saves fail with "Could not resolve to a Repository with the name ...":**
+  `repo` in `config.yml` must be the repo's **current** name. Sveltia writes via
+  the GitHub GraphQL API, which (unlike `git` clone/push and the REST API) does
+  not follow a repository rename redirect. If the repo was renamed, update `repo`
+  to the canonical `owner/name`.
 - **Edit committed but site not updated:** check the deploy workflow run in the
   repo's Actions tab; the push to `main` triggers build + deploy.

@@ -274,70 +274,41 @@
 	}
 
 	// --- deteccion del guardado --------------------------------------------
-	// Primario: interceptar el commit que Sveltia manda a la API de GitHub.
-	// Es independiente del idioma y de la UI del CMS.
-	function installFetchHook() {
-		if (!window.fetch) return;
-		var orig = window.fetch;
-		window.fetch = function (input, init) {
-			try {
-				var url = typeof input === "string" ? input : input && input.url;
-				var method =
-					(init && init.method) ||
-					(input && input.method) ||
-					"GET";
-				method = String(method).toUpperCase();
-				if (url && url.indexOf("api.github.com") !== -1) {
-					var body = init && typeof init.body === "string" ? init.body : "";
-					var isCommit =
-						body.indexOf("createCommitOnBranch") !== -1 ||
-						(/\/contents\//.test(url) &&
-							(method === "PUT" || method === "POST")) ||
-						(/\/git\/commits/.test(url) && method === "POST");
-					if (isCommit) onSaveDetected();
+	// Primario: API oficial de eventos de Sveltia CMS. El evento `postSave` se
+	// dispara cuando el commit termino de generarse, que es el mismo momento
+	// que nos interesa para empezar a observar el deploy.
+	// Docs: https://sveltiacms.app/en/docs/api/events
+	// El bundle de Sveltia se carga async, asi que esperamos a que
+	// `window.CMS.registerEventListener` exista antes de suscribirnos.
+	function installSveltiaEventListener() {
+		var MAX_WAIT_MS = 15000;
+		var INTERVAL_MS = 200;
+		var waited = 0;
+		var timer = setInterval(function () {
+			var cms = window.CMS;
+			if (cms && typeof cms.registerEventListener === "function") {
+				clearInterval(timer);
+				try {
+					cms.registerEventListener({
+						name: "postSave",
+						handler: function () {
+							onSaveDetected();
+						},
+					});
+				} catch (e) {
+					/* sin respaldo: si esto falla no detectamos guardados */
 				}
-			} catch (e) {
-				/* nunca romper el fetch original */
+				return;
 			}
-			return orig.apply(this, arguments);
-		};
-	}
-
-	// Respaldo: detectar cuando el toast de exito de Sveltia se vuelve visible.
-	// Los toasts viven SIEMPRE en el DOM, ocultos con aria-hidden="true"; por eso
-	// no alcanza con observar nodos agregados (eso disparaba en cada carga de la
-	// pagina). Lo que importa es la transicion aria-hidden true -> visible.
-	function installToastObserver() {
-		var rx = /(publicad|guardad|published|saved)/i;
-		var obs = new MutationObserver(function (mutations) {
-			for (var i = 0; i < mutations.length; i++) {
-				var m = mutations[i];
-				if (m.type !== "attributes" || m.attributeName !== "aria-hidden") {
-					continue;
-				}
-				var el = m.target;
-				if (!el || el.nodeType !== 1) continue;
-				var nowVisible = el.getAttribute("aria-hidden") !== "true";
-				var wasHidden = m.oldValue === "true";
-				if (nowVisible && wasHidden && rx.test(el.textContent || "")) {
-					onSaveDetected();
-					return;
-				}
-			}
-		});
-		obs.observe(document.body, {
-			attributes: true,
-			attributeFilter: ["aria-hidden"],
-			attributeOldValue: true,
-			subtree: true,
-		});
+			waited += INTERVAL_MS;
+			if (waited >= MAX_WAIT_MS) clearInterval(timer);
+		}, INTERVAL_MS);
 	}
 
 	// --- arranque -----------------------------------------------------------
 	function init() {
 		buildBanner();
-		installFetchHook();
-		installToastObserver();
+		installSveltiaEventListener();
 	}
 
 	if (document.readyState === "loading") {

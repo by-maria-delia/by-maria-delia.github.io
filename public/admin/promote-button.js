@@ -28,16 +28,25 @@
 		"/actions/workflows/promote.yml/dispatches";
 
 	// Cadencia para revisar si `preview` esta adelante de `main`. La API no
-	// autenticada da 60 req/hora por IP; con 5 min sobra y deja margen para
-	// los otros consumidores (banner, etc).
-	var REFRESH_AFTER_SUCCESS_MS = 8000;
+	// autenticada da 60 req/hora por IP; con esta cadencia y los disparos
+	// puntuales (postSave, focus) queda bastante margen.
 	var POLL_DEBOUNCE_MS = 3000;
+
+	// Modo post-dispatch: mientras esperamos que el workflow promote.yml haga
+	// el fast-forward sobre `main`, consultamos el compare endpoint cada 8s
+	// para detectar el momento en que `ahead_by` cae a 0 y devolvemos el boton
+	// a "Sin cambios para publicar". Si pasan 5 min sin cambios, abortamos y
+	// dejamos que la editora reintente.
+	var POST_DISPATCH_POLL_MS = 8000;
+	var POST_DISPATCH_MAX_MS = 5 * 60 * 1000;
 
 	// --- estado interno -----------------------------------------------------
 	var button;
 	var aheadBy = 0;
 	var dispatching = false;
 	var lastPollAt = 0;
+	var postDispatchTimer = null;
+	var postDispatchStart = 0;
 
 	// --- token storage ------------------------------------------------------
 	// Sveltia guarda el resultado del login OAuth en localStorage. La clave
@@ -81,13 +90,15 @@
 		button.setAttribute("aria-label", "Publicar cambios a produccion");
 		button.style.cssText = [
 			"position:fixed",
-			"top:12px",
-			"right:16px",
+			// Esquina inferior derecha: lejos del boton "Save" propio de
+			// Sveltia, que vive arriba a la derecha del editor de entradas.
+			"bottom:20px",
+			"right:20px",
 			"z-index:2147483646",
 			"display:none",
 			"align-items:center",
 			"gap:8px",
-			"padding:9px 16px",
+			"padding:11px 18px",
 			"border-radius:9999px",
 			"border:1px solid #C8BDAC",
 			"background:#5E7D6A",
@@ -97,7 +108,7 @@
 			"font-size:14px",
 			"line-height:1.1",
 			"cursor:pointer",
-			"box-shadow:0 6px 24px rgba(46,42,38,0.22)",
+			"box-shadow:0 8px 28px rgba(46,42,38,0.28)",
 		].join(";");
 		button.addEventListener("click", onClick);
 		button.addEventListener("mouseenter", function () {
@@ -142,13 +153,50 @@
 			})
 			.then(function (data) {
 				aheadBy = (data && data.ahead_by) || 0;
-				if (dispatching) return; // no pisar el estado "Publicando..."
+				if (dispatching) {
+					// Estamos esperando que el workflow promote.yml termine
+					// el fast-forward. Cuando ahead_by cae a 0, el push ya
+					// se hizo: cerramos el modo "Publicando..." y volvemos
+					// al estado idle.
+					if (aheadBy === 0) {
+						dispatching = false;
+						stopPostDispatchPolling();
+						setLabel(0, false);
+					}
+					return;
+				}
 				setLabel(aheadBy, aheadBy > 0);
 			})
 			.catch(function () {
 				// silencioso: no queremos arruinar el UI por un blip de red.
 				if (!dispatching) hide();
 			});
+	}
+
+	// --- post-dispatch polling ---------------------------------------------
+	function startPostDispatchPolling() {
+		stopPostDispatchPolling();
+		postDispatchStart = Date.now();
+		postDispatchTimer = setInterval(function () {
+			if (Date.now() - postDispatchStart > POST_DISPATCH_MAX_MS) {
+				// Algo se trabo. Cerramos el modo "Publicando..." y
+				// mostramos el conteo real para que se pueda reintentar.
+				stopPostDispatchPolling();
+				dispatching = false;
+				lastPollAt = 0;
+				refresh();
+				return;
+			}
+			lastPollAt = 0; // saltamos el debounce mientras polleamos
+			refresh();
+		}, POST_DISPATCH_POLL_MS);
+	}
+
+	function stopPostDispatchPolling() {
+		if (postDispatchTimer) {
+			clearInterval(postDispatchTimer);
+			postDispatchTimer = null;
+		}
 	}
 
 	// --- click handler ------------------------------------------------------
@@ -196,8 +244,11 @@
 			})
 			.then(function () {
 				emit("maria-delia:promote-dispatched", { count: count });
-				// Refrescar despues de un toque para reflejar ahead_by=0.
-				setTimeout(refresh, REFRESH_AFTER_SUCCESS_MS);
+				// Quedamos en modo "Publicando..." y polleamos el compare
+				// API: cuando promote.yml hace el fast-forward, ahead_by
+				// cae a 0 y devolvemos el boton a "Sin cambios para
+				// publicar" sin necesidad de recargar la pagina.
+				startPostDispatchPolling();
 			})
 			.catch(function (err) {
 				var message = "Reintenta o avisa al equipo.";
@@ -212,13 +263,14 @@
 						"No encontramos el workflow promote.yml. Avisa al equipo.";
 				}
 				emit("maria-delia:promote-failed", { message: message });
+				// El dispatch fallo: salimos del modo "Publicando..." y
+				// restauramos el boton para reintentar.
+				dispatching = false;
+				stopPostDispatchPolling();
 				button.textContent = prevText;
 				button.disabled = false;
 				button.style.background = "#5E7D6A";
 				button.style.cursor = "pointer";
-			})
-			.then(function () {
-				dispatching = false;
 			});
 	}
 

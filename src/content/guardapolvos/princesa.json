@@ -3,7 +3,7 @@
   "precio": 50000,
   "precioTexto": "",
   "descripcion": "Con su corte imperio y falda amplia, transforma cada jornada en algo especial. Porque toda princesa merece sentirse así, todos los días.",
-  "disponible": false,
+  "disponible": true,
   "imagenes": [
     "/media/guardapolvos/princesa.png"
   ]

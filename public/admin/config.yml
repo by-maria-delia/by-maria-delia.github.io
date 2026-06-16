@@ -17,7 +17,7 @@ backend:
   # Saves go to `preview`. Netlify auto-deploys it to the staging URL. The
   # editor then clicks "Publicar a produccion" in /admin/ to fast-forward
   # `main` to `preview`, which triggers the production deploy. See
-  # docs/handoff-staging-branch.md.
+  # docs/cms-auth-setup.md.
   branch: preview
   # OAuth via a self-hosted sveltia-cms-auth Cloudflare Worker.
   # Setup steps: docs/cms-auth-setup.md.

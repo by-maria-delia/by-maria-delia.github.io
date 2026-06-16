@@ -30,7 +30,7 @@ src/content/                       public/media/
   Components render static, in-repo data
 ```
 
-Non-technical editors manage this content through **Sveltia CMS** at `/admin/`, which reads and writes the same `src/content/` files via the GitHub backend. Each save commits to the repo and triggers an auto-deploy. See `docs/cms-auth-setup.md` for CMS authentication setup.
+Non-technical editors manage this content through **Sveltia CMS** at `/admin/`, which reads and writes the same `src/content/` files via the GitHub backend. Saves commit to the **`preview`** branch (not `main`), which Netlify auto-deploys to a staging URL (`https://maria-delia-preview.netlify.app`). The editor reviews staging, then clicks **Publicar a produccion** in `/admin/` to dispatch a workflow that fast-forwards `main` to `preview`. The push to `main` triggers the production deploy to GitHub Pages. See `docs/cms-auth-setup.md` for CMS authentication setup.
 
 ### Content shapes
 
@@ -89,10 +89,9 @@ None. The site is fully static and reads all content from in-repo files.
 
 ## Deployment
 
-CI runs via GitHub Actions (`.github/workflows/deploy.yml`):
+Two GitHub Actions workflows under `.github/workflows/`:
 
-1. Triggers on push to `main` (or manually via `workflow_dispatch`)
-2. Installs deps and builds with Vite
-3. Deploys `dist/` to GitHub Pages
+- **`deploy.yml`**: triggers on push to `main` (or manual `workflow_dispatch`). Builds with Vite and deploys `dist/` to GitHub Pages via the official Pages action (`actions/upload-pages-artifact` + `actions/deploy-pages`).
+- **`promote.yml`**: fired when the editor clicks **Publicar a produccion** in `/admin/`. Fast-forwards `main` to `preview` and dispatches `deploy.yml`.
 
-Content edits made in the CMS commit to `main`, which triggers this workflow and publishes the change automatically.
+Staging is on Netlify, auto-deploying every push to the `preview` branch to `https://maria-delia-preview.netlify.app`. See `docs/cms-auth-setup.md` for the full editor flow.

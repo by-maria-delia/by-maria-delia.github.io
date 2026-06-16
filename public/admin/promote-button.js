@@ -14,7 +14,7 @@
  *
  * Usa el token OAuth que Sveltia ya guarda en `localStorage` despues del
  * login. Sin token (sesion expirada): el boton avisa que hay que volver a
- * entrar. Ver docs/handoff-staging-branch.md.
+ * entrar.
  */
 (function () {
 	"use strict";

@@ -1,0 +1,36 @@
+name: Promote preview to main
+
+# Fires when the editor clicks "Publicar a produccion" in /admin/.
+# Fast-forwards main to preview, which in turn triggers the production deploy
+# workflow on the new main commit. See docs/handoff-staging-branch.md.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Two clicks land back-to-back: the second sees an empty ff and exits 0.
+concurrency:
+  group: promote
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Fast-forward main to preview
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin preview
+          if ! git merge --ff-only origin/preview; then
+            echo "::error::main has diverged from preview. A developer must rebase preview onto main before promoting."
+            exit 1
+          fi
+          git push origin main

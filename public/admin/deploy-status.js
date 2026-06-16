@@ -1,14 +1,21 @@
 /*
  * Banner de estado de publicacion para Sveltia CMS.
  *
- * Sveltia muestra "publicado" cuando el commit llega a GitHub, NO cuando la
- * pagina termina de desplegarse. Este script cierra esa brecha: detecta el
- * guardado, consulta la API de GitHub Actions y avisa a la editora cuando los
- * cambios ya estan en linea.
+ * Flujo (post staging branch, ver docs/handoff-staging-branch.md):
+ *
+ *  1. La editora guarda en /admin/. El commit va a la rama `preview`.
+ *  2. Netlify despliega la vista previa en ~1 minuto. El banner avisa:
+ *     "Cambios guardados en vista previa" y, tras una espera, "Vista previa
+ *     lista" con enlace al sitio de staging.
+ *  3. Cuando ella decide publicar a produccion, el boton "Publicar a
+ *     produccion" (ver promote-button.js) dispara el workflow de GitHub
+ *     Actions y emite el evento `maria-delia:promote-dispatched`. El banner
+ *     cambia a modo "Publicando a produccion..." y consulta la API de
+ *     GitHub Actions para avisar cuando el sitio en vivo se actualizo.
  *
  * Sin dependencias. Vanilla JS. Pensado para el limite no autenticado de la
- * API de GitHub (60 pedidos por hora por IP): no hay polling en reposo, solo
- * una rafaga corta despues de cada guardado.
+ * API de GitHub (60 pedidos por hora por IP): solo se consulta despues de un
+ * deploy a produccion.
  */
 (function () {
 	"use strict";
@@ -17,8 +24,10 @@
 	var RUNS_API =
 		"https://api.github.com/repos/" +
 		REPO +
-		"/actions/runs?branch=main&per_page=1";
+		"/actions/runs?branch=main&per_page=5";
 	var LIVE_URL = "https://by-maria-delia.github.io/";
+	var STAGING_URL = "https://maria-delia-preview.netlify.app/";
+	var STAGING_READY_DELAY_MS = 60000; // tiempo tipico de build en Netlify
 
 	var POLL_MS = 8000; // cadencia de la rafaga de consultas
 	var MAX_WATCH_MS = 3 * 60 * 1000; // tope de tiempo observando un deploy
@@ -26,9 +35,10 @@
 	var CLOCK_SKEW_MS = 60000; // margen al comparar created_at con el guardado
 
 	// --- estado interno -----------------------------------------------------
-	var saveTime = 0;
-	var watchStart = 0;
+	var watchStartTime = 0; // momento desde el que un run cuenta como "nuestro"
+	var watchTimerStart = 0;
 	var pollTimer = null;
+	var stagingDelayTimer = null;
 	var lastSaveTrigger = 0;
 	var apiErrors = 0;
 
@@ -101,7 +111,7 @@
 		closeBtn = document.createElement("button");
 		closeBtn.type = "button";
 		closeBtn.setAttribute("aria-label", "Cerrar aviso");
-		closeBtn.textContent = "×"; // ×
+		closeBtn.textContent = "×";
 		closeBtn.style.cssText = [
 			"flex:0 0 auto",
 			"appearance:none",
@@ -114,7 +124,8 @@
 			"padding:0 2px",
 		].join(";");
 		closeBtn.addEventListener("click", function () {
-			stopWatching();
+			stopProductionWatch();
+			stopStagingDelay();
 			hide();
 		});
 
@@ -133,79 +144,131 @@
 	}
 
 	function render(state) {
-		// state: { color, title, subtitle, showLink }
+		// state: { color, title, subtitle, linkUrl, linkText }
 		dot.style.background = state.color;
 		title.textContent = state.title;
 		subtitle.textContent = state.subtitle || "";
 		subtitle.style.display = state.subtitle ? "block" : "none";
-		link.style.display = state.showLink ? "inline-block" : "none";
+		if (state.linkUrl) {
+			link.href = state.linkUrl;
+			link.textContent = state.linkText || "Ver la pagina";
+			link.style.display = "inline-block";
+		} else {
+			link.style.display = "none";
+		}
 		show();
 	}
 
 	var STATES = {
+		stagingSaved: {
+			color: "#E3C567",
+			title: "Cambios guardados en vista previa",
+			subtitle:
+				"La vista previa estara lista en aproximadamente un minuto.",
+			linkUrl: STAGING_URL,
+			linkText: "Ver vista previa",
+		},
+		stagingReady: {
+			color: "#5E7D6A",
+			title: "Vista previa lista",
+			subtitle: "Revisala y luego pulsa Publicar a produccion.",
+			linkUrl: STAGING_URL,
+			linkText: "Ver vista previa",
+		},
 		publishing: {
 			color: "#E3C567",
-			title: "Publicando cambios...",
+			title: "Publicando a produccion...",
 			subtitle: "Esto puede tardar hasta un minuto.",
-			showLink: false,
+			linkUrl: null,
 		},
 		success: {
 			color: "#5E7D6A",
-			title: "Cambios publicados",
-			subtitle: "Tus cambios ya estan en linea.",
-			showLink: true,
+			title: "Publicado en produccion",
+			subtitle: "Tus cambios ya estan en el sitio en vivo.",
+			linkUrl: LIVE_URL,
+			linkText: "Ver la pagina",
 		},
 		failure: {
 			color: "#C0785E",
 			title: "Hubo un problema al publicar",
-			subtitle: "Reintenta guardar o avisa al equipo.",
-			showLink: false,
+			subtitle: "Reintenta o avisa al equipo.",
+			linkUrl: null,
 		},
 		slow: {
 			color: "#E3C567",
 			title: "La publicacion esta tardando mas de lo normal",
 			subtitle: "Proba revisar la pagina en unos minutos.",
-			showLink: true,
+			linkUrl: LIVE_URL,
+			linkText: "Ver la pagina",
 		},
 	};
 
-	// --- consulta a la API --------------------------------------------------
+	// --- modo staging (post-save a `preview`) -------------------------------
+	function startStagingFlow() {
+		stopProductionWatch();
+		stopStagingDelay();
+		if (hideTimer) {
+			clearTimeout(hideTimer);
+			hideTimer = null;
+		}
+		render(STATES.stagingSaved);
+		stagingDelayTimer = setTimeout(function () {
+			render(STATES.stagingReady);
+			autoHide(45000);
+		}, STAGING_READY_DELAY_MS);
+	}
+
+	function stopStagingDelay() {
+		if (stagingDelayTimer) {
+			clearTimeout(stagingDelayTimer);
+			stagingDelayTimer = null;
+		}
+	}
+
+	// --- modo produccion (post promote workflow_dispatch) -------------------
 	function fetchLatestRun() {
 		return fetch(RUNS_API, {
 			cache: "no-store",
 			headers: { Accept: "application/vnd.github+json" },
-		}).then(function (res) {
-			if (res.status === 403) {
-				// limite de la API agotado: dejar de molestar.
-				throw new Error("rate-limited");
-			}
-			if (!res.ok) throw new Error("http-" + res.status);
-			return res.json();
-		}).then(function (data) {
-			return data && data.workflow_runs && data.workflow_runs[0]
-				? data.workflow_runs[0]
-				: null;
-		});
+		})
+			.then(function (res) {
+				if (res.status === 403) {
+					throw new Error("rate-limited");
+				}
+				if (!res.ok) throw new Error("http-" + res.status);
+				return res.json();
+			})
+			.then(function (data) {
+				if (!data || !data.workflow_runs) return null;
+				// Buscamos el primer run en `main` creado despues de pulsar
+				// Publicar. Asi ignoramos un run viejo que aun esta "completed"
+				// arriba de la lista mientras GitHub no muestra el nuevo.
+				for (var i = 0; i < data.workflow_runs.length; i++) {
+					var run = data.workflow_runs[i];
+					var createdMs = Date.parse(run.created_at);
+					if (
+						!isNaN(createdMs) &&
+						createdMs >= watchStartTime - CLOCK_SKEW_MS
+					) {
+						return run;
+					}
+				}
+				return null;
+			});
 	}
 
 	function tick() {
-		if (Date.now() - watchStart > MAX_WATCH_MS) {
+		if (Date.now() - watchTimerStart > MAX_WATCH_MS) {
 			render(STATES.slow);
-			stopWatching();
+			stopProductionWatch();
 			return;
 		}
 
 		fetchLatestRun()
 			.then(function (run) {
 				apiErrors = 0;
-				if (!run) return; // sin datos: seguir esperando
-
-				var createdMs = Date.parse(run.created_at);
-				var isOurs =
-					!isNaN(createdMs) && createdMs >= saveTime - CLOCK_SKEW_MS;
-
-				if (!isOurs) {
-					// El run nuevo todavia no aparece; CI aun no arranco.
+				if (!run) {
+					// CI aun no arranco: seguir mostrando "Publicando...".
 					render(STATES.publishing);
 					return;
 				}
@@ -215,8 +278,7 @@
 					return;
 				}
 
-				// Run terminado y es el nuestro.
-				stopWatching();
+				stopProductionWatch();
 				if (run.conclusion === "success") {
 					render(STATES.success);
 					autoHide(20000);
@@ -226,13 +288,13 @@
 			})
 			.catch(function (err) {
 				if (err && err.message === "rate-limited") {
-					stopWatching();
+					stopProductionWatch();
 					hide();
 					return;
 				}
 				apiErrors += 1;
 				if (apiErrors >= 3) {
-					stopWatching();
+					stopProductionWatch();
 					hide();
 				}
 			});
@@ -244,10 +306,10 @@
 		hideTimer = setTimeout(hide, ms);
 	}
 
-	// --- ciclo de observacion ----------------------------------------------
-	function startWatching() {
-		saveTime = Date.now();
-		watchStart = saveTime;
+	function startProductionWatch() {
+		stopStagingDelay();
+		watchStartTime = Date.now();
+		watchTimerStart = watchStartTime;
 		apiErrors = 0;
 		if (hideTimer) {
 			clearTimeout(hideTimer);
@@ -259,7 +321,7 @@
 		pollTimer = setInterval(tick, POLL_MS);
 	}
 
-	function stopWatching() {
+	function stopProductionWatch() {
 		if (pollTimer) {
 			clearInterval(pollTimer);
 			pollTimer = null;
@@ -270,7 +332,7 @@
 		var now = Date.now();
 		if (now - lastSaveTrigger < SAVE_COOLDOWN_MS) return;
 		lastSaveTrigger = now;
-		startWatching();
+		startStagingFlow();
 	}
 
 	// --- deteccion del guardado --------------------------------------------
@@ -305,10 +367,31 @@
 		}, INTERVAL_MS);
 	}
 
+	// --- evento "promote dispatched" (lo emite promote-button.js) -----------
+	function installPromoteListener() {
+		window.addEventListener("maria-delia:promote-dispatched", function () {
+			startProductionWatch();
+		});
+		window.addEventListener("maria-delia:promote-failed", function (e) {
+			stopProductionWatch();
+			stopStagingDelay();
+			var detail = (e && e.detail) || {};
+			render({
+				color: "#C0785E",
+				title: "No se pudo publicar",
+				subtitle:
+					detail.message || "Reintenta o avisa al equipo.",
+				linkUrl: null,
+			});
+			autoHide(15000);
+		});
+	}
+
 	// --- arranque -----------------------------------------------------------
 	function init() {
 		buildBanner();
 		installSveltiaEventListener();
+		installPromoteListener();
 	}
 
 	if (document.readyState === "loading") {

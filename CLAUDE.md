@@ -17,25 +17,31 @@ React 19 + TypeScript 5.9 + Vite 7 + Tailwind CSS 4. Content authored in-repo an
 
 ## Brand & Design
 
-### Colors (use semantic names in Tailwind classes)
-| Name | Hex | Usage |
-|------|-----|-------|
-| Soft White / Janna | #F4EED7 | Main backgrounds |
-| Cream / Spanish White | #EAD0C3 | Card backgrounds, image placeholders |
-| School Blue / Jet Stream | #BED5CF | Primary UI highlights, hover accents |
-| School Blue Dark | #9ABFB8 | Hover/active variant of school-blue |
-| Bison Hide | #C8BDAC | Borders, dividers, subtle surfaces |
-| Denim Blue | #4a4540 | Headings, primary buttons (dark earthy) |
-| Leaf Green | #5E7D6A | Accents, nature references |
-| Teacher Pink | #C0785E | Warm terracotta accents, small CTA details |
-| Warm Yellow | #E3C567 | Tiny details only |
-| Dark Text | #2e2a26 | Main text |
-| Soft Gray | #666058 | Secondary text, muted labels (WCAG AA on all backgrounds) |
+### Colors ("Recreo" palette — use the token names in Tailwind classes, e.g. `bg-sky`, `text-ink`)
+Defined in `src/index.css` `@theme`. Each surface color pairs with a deeper accent of the same hue.
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `cream` | #FFFDF9 | Main page background |
+| `sand` | #F4F0E8 | Subtle surfaces (image wells, idle option chips) |
+| `sky` | #C3E1F2 | Soft blue surfaces, highlights, "Cómo encargar" section |
+| `sky-deep` | #5E93B5 | Primary blue buttons |
+| `sky-ink` | #3E6C8A | Dark blue: logo, headings on light blue, footer bg |
+| `pink` | #F8C7D7 | Soft pink surfaces |
+| `pink-deep` | #E486A4 | Primary CTA accent, selected states |
+| `butter` | #FBEAAE | Warm yellow surfaces, "Galería" section |
+| `butter-deep` | #D7A93B | Warm yellow accent |
+| `mint` | #C9E9D5 | Soft green surfaces, "Hecho a mano" section |
+| `mint-deep` | #65AE85 | Green accent, WhatsApp pill / submit |
+| `ink` | #3D4651 | Main text |
+| `muted` | #737E8B | Secondary text, muted labels |
+| `line` | #ECE6DC | Borders, dividers, scrollbar |
+
+Section backgrounds flow through SVG wave dividers (cream → sky → cream → butter → mint → footer).
 
 ### Fonts (loaded from Google Fonts)
-- **Oooh Baby**: display/branding (hero title, logo)
-- **Nunito**: body text, navigation, UI
-- **Shadows Into Light**: handwritten accent (labels, badges)
+- **Oooh Baby** (`font-display`): display/branding (hero title, logo, delivery footnote)
+- **Baloo 2** (`font-head`): headings, eyebrow pills, buttons, UI labels
+- **Nunito** (`font-body`): body text, navigation, paragraphs
 
 ### Brand Personality
 Artesanal, calido, prolijo, clasico, amigable, docente, femenino. All copy in **Spanish (Argentina)**.

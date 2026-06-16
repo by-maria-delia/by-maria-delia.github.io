@@ -171,6 +171,12 @@ collections:
             widget: object
             fields:
               - { name: eyebrow, label: "Antetítulo", widget: string }
+              - name: image
+                label: "Imagen"
+                widget: image
+                media_folder: "/public/media/guardapolvos"
+                public_folder: "/media/guardapolvos"
+              - { name: imageAlt, label: "Texto alternativo de la imagen", widget: string, required: false, hint: "Descripción de la imagen para accesibilidad." }
               - name: primaryCta
                 label: "Botón principal"
                 widget: object

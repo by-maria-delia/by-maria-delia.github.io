@@ -1,46 +1,48 @@
 import { useSiteContent } from "../data";
+import FadeUp from "./FadeUp";
 
 export default function DeliveryInfo() {
 	const { delivery } = useSiteContent();
 
 	return (
-		<section className="relative px-4 py-24 overflow-hidden bg-cream/50">
-			{/* Ambient gradient */}
-			<div className="absolute inset-0 pointer-events-none">
-				<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-100 bg-school-blue/5 rounded-full blur-[80px]" />
-			</div>
-
-			<div className="relative max-w-2xl mx-auto text-center">
-				<div className="inline-flex items-center justify-center mb-6 w-14 h-14 rounded-2xl bg-school-blue/10 text-denim-blue">
+		<section className="px-5 py-17.5 text-center bg-mint">
+			<FadeUp className="max-w-6xl mx-auto">
+				<div className="grid w-19.5 h-19.5 mx-auto mb-6 bg-white rounded-full shadow-lg place-items-center text-pink-deep shadow-ink/12">
 					<svg
-						className="w-7 h-7"
+						className="w-10 h-10"
+						viewBox="0 0 24 24"
 						fill="none"
 						stroke="currentColor"
-						strokeWidth={1.5}
-						viewBox="0 0 24 24"
+						strokeWidth={1.6}
+						aria-hidden="true"
 					>
 						<path
 							strokeLinecap="round"
 							strokeLinejoin="round"
-							d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+							d="M21 8.25c0-2.5-2.1-4.5-4.7-4.5-1.9 0-3.6 1.1-4.3 2.7-.7-1.6-2.4-2.7-4.3-2.7C5.1 3.75 3 5.76 3 8.25c0 7.2 9 12 9 12s9-4.78 9-12z"
 						/>
 					</svg>
 				</div>
 
-				<h2 className="mb-8 text-4xl tracking-tight font-display md:text-5xl text-denim-blue">
+				<h2 className="text-[clamp(2.4rem,7vw,3.6rem)] text-[#2f6048] mb-4">
 					{delivery.heading}
 				</h2>
 
-				<div className="space-y-4 text-lg leading-relaxed text-dark-text/75">
+				<div>
 					{delivery.paragraphs.map((paragraph) => (
-						<p key={paragraph}>{paragraph}</p>
+						<p
+							key={paragraph}
+							className="max-w-[48ch] mx-auto mt-2.5 text-lg font-semibold text-[#33614b] first:mt-0"
+						>
+							{paragraph}
+						</p>
 					))}
 				</div>
 
-				<p className="mt-8 text-xl font-handwritten text-denim-blue/70">
+				<p className="mt-6 text-3xl font-display text-mint-deep">
 					{delivery.footnote}
 				</p>
-			</div>
+			</FadeUp>
 		</section>
 	);
 }

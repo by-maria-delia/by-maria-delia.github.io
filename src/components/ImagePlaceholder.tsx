@@ -1,6 +1,6 @@
 const ImagePlaceholder = () => {
 	return (
-		<div className="flex items-center justify-center w-full h-full text-soft-gray">
+		<div className="flex items-center justify-center w-full h-full text-muted">
 			<svg
 				className="w-16 h-16"
 				fill="none"

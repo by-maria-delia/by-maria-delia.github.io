@@ -4,51 +4,62 @@ import ImagePlaceholder from "./ImagePlaceholder";
 
 interface ProductCardProps {
 	product: Product;
+	index: number;
 	onCustomize: (product: Product) => void;
 }
 
+const cardBorder = [
+	"border-pink",
+	"border-sky",
+	"border-butter",
+	"border-mint",
+];
+
+const cardImgBg = ["bg-pink/40", "bg-sky/40", "bg-butter/40", "bg-mint/40"];
+
 export default function ProductCard({
 	product,
+	index,
 	onCustomize,
 }: ProductCardProps) {
 	const imageSrc = product.imagenes[0] ?? null;
 	const price = formatPrice(product);
+	const variant = index % 4;
 
 	return (
-		<div className="flex flex-col overflow-hidden transition-all border group bg-soft-white rounded-xl border-denim-blue/8 hover:border-school-blue/25 hover:shadow-lg hover:shadow-school-blue/8">
-			<div className="overflow-hidden aspect-square bg-cream">
+		<article
+			className={`relative flex flex-col overflow-hidden transition-all bg-white border-[3px] rounded-3xl group hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-ink/13 ${cardBorder[variant]}`}
+		>
+			<div
+				className={`relative overflow-hidden aspect-square ${cardImgBg[variant]}`}
+			>
+				{price && (
+					<span className="absolute z-10 px-3 py-1.5 text-ink bg-white rounded-full shadow top-3 right-3 font-head font-extrabold text-[.92rem] rotate-[4deg]">
+						{price}
+					</span>
+				)}
 				{imageSrc ? (
 					<img
 						src={imageSrc}
 						alt={product.nombre}
 						loading="lazy"
-						className="w-full h-full object-contain group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+						className="object-contain w-full h-full transition-transform duration-500 group-hover:scale-105"
 					/>
 				) : (
 					<ImagePlaceholder />
 				)}
 			</div>
 
-			<div className="flex flex-col flex-1 p-3 md:p-4">
-				<h3 className="mb-0.5 text-base font-semibold tracking-tight text-dark-text">
-					{product.nombre}
-				</h3>
-
-				<div className="mt-auto">
-					{price && (
-						<p className="mb-3 text-base md:text-lg font-bold text-denim-blue tabular-nums">
-							{price}
-						</p>
-					)}
-					<button
-						type="button"
-						onClick={() => onCustomize(product)}
-						className="btn-press w-full bg-denim-blue text-white font-semibold py-2 text-sm rounded-lg hover:bg-denim-blue/90 hover:shadow-md hover:shadow-denim-blue/15 transition-all cursor-pointer"
-					>
-						Ver y personalizar
-					</button>
-				</div>
+			<div className="flex flex-col flex-1 p-4 text-center">
+				<h3 className="mb-3 text-xl font-head text-ink">{product.nombre}</h3>
+				<button
+					type="button"
+					onClick={() => onCustomize(product)}
+					className="w-full py-3 mt-auto text-sm font-bold text-white transition-colors rounded-xl btn-press bg-sky-deep hover:bg-sky-ink cursor-pointer"
+				>
+					Ver y personalizar
+				</button>
 			</div>
-		</div>
+		</article>
 	);
 }

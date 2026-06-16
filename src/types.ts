@@ -58,6 +58,10 @@ export interface SiteContent {
 	nav: { links: NavLink[] };
 	hero: {
 		eyebrow: string;
+		/** Public path to the hero product image (e.g. `/media/guardapolvos/princesa.png`). */
+		image: string;
+		/** Alt text for the hero image. */
+		imageAlt?: string;
 		primaryCta: NavLink;
 		secondaryCta: NavLink;
 	};

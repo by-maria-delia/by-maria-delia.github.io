@@ -69,7 +69,7 @@ export default function ImageCarousel({
 							setActiveIndex(swiper.realIndex);
 							setIsZoomed(false);
 						}}
-						className="rounded-xl overflow-hidden aspect-4/3 bg-cream"
+						className="overflow-hidden rounded-2xl aspect-4/3 bg-sand"
 					>
 						{images.map((image, i) => {
 							const imgSrc = image.src;
@@ -78,7 +78,7 @@ export default function ImageCarousel({
 								<SwiperSlide
 									// biome-ignore lint/suspicious/noArrayIndexKey: index is stable for a static images array
 									key={i}
-									className="flex items-center justify-center bg-cream"
+									className="flex items-center justify-center bg-sand"
 								>
 									{image.placeholder ? (
 										<ImagePlaceholder />
@@ -94,7 +94,7 @@ export default function ImageCarousel({
 													})}
 												/>
 											</div>
-											{/* Desktop-only hover zoom overlay — always opacity-0 on mobile */}
+											{/* Desktop-only hover zoom overlay - always opacity-0 on mobile */}
 											{!isMobile && (
 												<img
 													src={imgSrc}
@@ -129,17 +129,17 @@ export default function ImageCarousel({
 							type="button"
 							aria-label="Imagen anterior"
 							onClick={() => swiperInstance?.slidePrev()}
-							className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/80 hover:bg-white shadow-sm flex items-center justify-center transition cursor-pointer"
+							className="absolute z-10 grid w-10 h-10 transition rounded-full shadow left-2.5 top-1/2 -translate-y-1/2 place-items-center cursor-pointer bg-white/90 hover:bg-white text-ink btn-press"
 						>
 							<svg
-								className="w-4 h-4 text-dark-text"
+								className="w-5 h-5"
 								viewBox="0 0 24 24"
 								fill="none"
 							>
 								<path
-									d="M15 19l-7-7 7-7"
+									d="M15 18l-6-6 6-6"
 									stroke="currentColor"
-									strokeWidth={2}
+									strokeWidth={2.4}
 									strokeLinecap="round"
 									strokeLinejoin="round"
 								/>
@@ -149,17 +149,17 @@ export default function ImageCarousel({
 							type="button"
 							aria-label="Imagen siguiente"
 							onClick={() => swiperInstance?.slideNext()}
-							className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/80 hover:bg-white shadow-sm flex items-center justify-center transition cursor-pointer"
+							className="absolute z-10 grid w-10 h-10 transition rounded-full shadow right-2.5 top-1/2 -translate-y-1/2 place-items-center cursor-pointer bg-white/90 hover:bg-white text-ink btn-press"
 						>
 							<svg
-								className="w-4 h-4 text-dark-text"
+								className="w-5 h-5"
 								viewBox="0 0 24 24"
 								fill="none"
 							>
 								<path
-									d="M9 5l7 7-7 7"
+									d="M9 18l6-6-6-6"
 									stroke="currentColor"
-									strokeWidth={2}
+									strokeWidth={2.4}
 									strokeLinecap="round"
 									strokeLinejoin="round"
 								/>
@@ -190,8 +190,8 @@ export default function ImageCarousel({
 							<span
 								className={`block w-2 h-2 rounded-full transition-colors ${
 									i === activeIndex
-										? "bg-denim-blue"
-										: "bg-denim-blue/25 group-hover:bg-denim-blue/40"
+										? "bg-pink-deep"
+										: "bg-ink/25 group-hover:bg-ink/40"
 								}`}
 							/>
 						</button>

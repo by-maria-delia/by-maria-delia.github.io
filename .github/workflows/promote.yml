@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 # Two clicks land back-to-back: the second sees an empty ff and exits 0.
 concurrency:
@@ -34,3 +35,12 @@ jobs:
             exit 1
           fi
           git push origin main
+
+      # Pushes made by GITHUB_TOKEN do not trigger downstream push-driven
+      # workflows. Explicitly dispatch the deploy workflow so the live site
+      # actually updates. workflow_dispatch is exempt from the no-recursive
+      # -trigger rule.
+      - name: Trigger production deploy
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --ref main

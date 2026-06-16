@@ -140,6 +140,26 @@ collections:
         media_folder: "/public/media/pockets"
         public_folder: "/media/pockets"
 
+  # --- Bases (Customizer) ------------------------------------------------------
+  - name: bases
+    label: "Telas base"
+    label_singular: "Tela base"
+    description: "Galería de telas base global del personalizador."
+    folder: "src/content/bases"
+    extension: "json"
+    format: "json"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: nombre
+    summary: "{{fields.nombre}}"
+    fields:
+      - { name: nombre, label: "Nombre", widget: string, hint: "También es el valor enviado en el mensaje de WhatsApp." }
+      - name: imagen
+        label: "Imagen"
+        widget: image
+        media_folder: "/public/media/bases"
+        public_folder: "/media/bases"
+
   # --- Tasks 2 & 4: Singletons -------------------------------------------------
   - name: configuracion
     label: "Configuración del sitio"

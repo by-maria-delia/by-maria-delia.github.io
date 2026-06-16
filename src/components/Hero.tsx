@@ -22,7 +22,7 @@ export default function Hero() {
 					<span className="inline-block px-4 py-1.5 mb-4 text-sm font-bold bg-white rounded-full shadow-md font-head text-pink-deep shadow-ink/8">
 						{hero.eyebrow}
 					</span>
-					<h1 className="relative z-10 font-display text-[clamp(4.4rem,17vw,8.5rem)] text-sky-ink leading-[0.78] mb-4">
+					<h1 className="relative z-10 font-display text-[clamp(4.4rem,17vw,8.5rem)] text-sky-ink leading-[0.95] mb-4">
 						<span className="absolute -z-1 left-[-2%] bottom-[8%] w-[62%] h-[34%] bg-butter rounded-full opacity-70 -rotate-2" />
 						{brandName}
 					</h1>

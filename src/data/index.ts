@@ -1,5 +1,5 @@
 import { galleryPhotos } from "../content/gallery";
-import { pockets, stamps } from "../content/options";
+import { bases, pockets, stamps } from "../content/options";
 import { products, productsDetails } from "../content/products";
 import { siteContent } from "../content/site";
 
@@ -28,3 +28,6 @@ export const useStampImages = () => ({ images: stamps });
 
 /** Global pocket options read from in-repo content; no network requests. */
 export const usePocketsImages = () => ({ images: pockets });
+
+/** Global base (cloth design) options read from in-repo content; no network requests. */
+export const useBaseImages = () => ({ images: bases });

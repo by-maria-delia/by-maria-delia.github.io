@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import SizeGuideImg from "../assets/sizes_guide.png";
-import { usePocketsImages, useProductsDetails, useStampImages } from "../data";
+import {
+	useBaseImages,
+	usePocketsImages,
+	useProductsDetails,
+	useStampImages,
+} from "../data";
 import useIsMobile from "../hooks/useIsMobile";
 import type { CarouselImage, Product } from "../types";
 import { cn } from "../utils/cn";
@@ -35,12 +40,14 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 	const [size, setSize] = useState("");
 	const [pockets, setPockets] = useState("");
 	const [estampado, setEstampado] = useState("");
+	const [base, setBase] = useState("");
 	const [comments, setComments] = useState("");
 
 	const isMobile = useIsMobile();
 
 	const { images: stampImages } = useStampImages();
 	const { images: pocketsImages } = usePocketsImages();
+	const { images: baseImages } = useBaseImages();
 	const { data: productDetails } = useProductsDetails();
 	const price = formatPrice(product);
 	const carouselImages: CarouselImage[] = [
@@ -54,7 +61,7 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 		? productDetails.talles.split(",").map((s) => s.trim())
 		: ["XS", "S", "M", "L", "XL", "XXL"];
 
-	const isValid = size && pockets && estampado;
+	const isValid = size && pockets && estampado && base;
 	const dialogRef = useRef<HTMLDivElement>(null);
 
 	// Lock body scroll + close on Escape
@@ -126,6 +133,7 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 			size,
 			pockets,
 			tipo_de_estampado: estampado,
+			base,
 			extra_comments: comments,
 		});
 		window.open(url, "_blank");
@@ -312,6 +320,47 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 							</fieldset>
 						)}
 
+						{/* Base selector */}
+						{baseImages.length > 0 && (
+							<fieldset className="flex flex-col gap-2.5 min-w-0">
+								<legend className="font-bold font-head text-ink">
+									4 · Base <span className="text-pink-deep">*</span>
+								</legend>
+								<div className="flex gap-3 px-1 py-2.5 overflow-x-auto custom-scrollbar">
+									{baseImages.map((image) => {
+										const displayName = image.nombre;
+										const selected = base === displayName;
+										return (
+											<button
+												type="button"
+												key={image.nombre}
+												onClick={() => setBase(displayName)}
+												className={cn(
+													"btn-press relative rounded-xl border-2 overflow-hidden transition-all shrink-0 w-28 cursor-pointer",
+													selected
+														? "border-pink-deep ring-2 ring-pink-deep/20 shadow-md"
+														: "border-ink/15 hover:border-pink-deep/30",
+												)}
+											>
+												{selected && <CheckTick />}
+												<div className="bg-sand">
+													<img
+														src={image.imagen}
+														alt={displayName}
+														loading="lazy"
+														className="object-contain w-full h-22"
+													/>
+												</div>
+												<p className="p-2 text-xs font-bold leading-tight text-center text-ink">
+													{displayName}
+												</p>
+											</button>
+										);
+									})}
+								</div>
+							</fieldset>
+						)}
+
 						{/* Comments */}
 						<div className="flex flex-col gap-2.5">
 							<label
@@ -362,7 +411,7 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 						>
 							{isValid
 								? "¡Todo listo para enviar!"
-								: "Seleccioná talle, bolsillo y estampado para continuar."}
+								: "Seleccioná talle, bolsillo, estampado y base para continuar."}
 						</p>
 					</div>
 				</div>

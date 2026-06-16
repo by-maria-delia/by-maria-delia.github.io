@@ -92,6 +92,7 @@ export interface WhatsAppParams {
 	size: string;
 	pockets: string;
 	tipo_de_estampado: string;
+	base: string;
 	extra_comments: string;
 }
 

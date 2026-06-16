@@ -14,7 +14,11 @@
 backend:
   name: github
   repo: by-maria-delia/by-maria-delia.github.io
-  branch: main
+  # Saves go to `preview`. Netlify auto-deploys it to the staging URL. The
+  # editor then clicks "Publicar a produccion" in /admin/ to fast-forward
+  # `main` to `preview`, which triggers the production deploy. See
+  # docs/handoff-staging-branch.md.
+  branch: preview
   # OAuth via a self-hosted sveltia-cms-auth Cloudflare Worker.
   # Setup steps: docs/cms-auth-setup.md.
   base_url: https://sveltia-cms-auth.st-website-builder-webhook.workers.dev

@@ -12,7 +12,10 @@ Key facts for this project:
 - Repo: `by-maria-delia/by-maria-delia.github.io`
 - Live site host: `by-maria-delia.github.io`
 - Admin URL: `https://by-maria-delia.github.io/admin/`
-- Content branch (where CMS commits land and what triggers deploy): `main`
+- Staging branch (where CMS commits land and what auto-deploys to the
+  Netlify preview URL): `preview`
+- Production branch (what triggers the live GitHub Pages deploy when promoted
+  from `preview`): `main`
 
 ---
 
@@ -66,7 +69,7 @@ In `public/admin/config.yml`, set the backend `base_url` to the Worker origin
 backend:
   name: github
   repo: by-maria-delia/by-maria-delia.github.io
-  branch: main
+  branch: preview
   base_url: https://sveltia-cms-auth.<your-subdomain>.workers.dev
 ```
 
@@ -88,9 +91,29 @@ repo (Sveltia commits content on her behalf).
    handshake and returns to the admin, now logged in.
 3. Make a small content edit (e.g. toggle a guardapolvo's **Disponible**, or fix
    a caption) and **Publish**.
-4. Confirm a commit appears on `main` in the repo.
-5. The deploy GitHub Action runs on that push; within a couple of minutes the
-   change is live on the site.
+4. Confirm a commit appears on the `preview` branch (NOT `main`). Netlify
+   redeploys the staging URL within roughly 1 minute. The in-admin banner
+   shows "Cambios guardados en vista previa" with a link to the preview.
+5. Review the change on the staging URL. When satisfied, click
+   **Publicar a produccion** in the admin. That triggers the `promote.yml`
+   workflow, which fast-forwards `main` to `preview`. The standard production
+   deploy workflow then runs on `main` and updates the live site.
+
+## Como publicar (resumen para la editora, en espanol)
+
+1. Entra a `https://by-maria-delia.github.io/admin/` con tu cuenta de GitHub.
+2. Edita y guarda como siempre. Tus cambios NO van directo al sitio en vivo;
+   primero van a una **vista previa** en
+   `https://maria-delia-preview.netlify.app/`.
+3. El banner amarillo te avisa cuando la vista previa esta lista (suele tardar
+   un minuto). Revisala con calma.
+4. Cuando este todo bien, pulsa **Publicar a produccion** (boton verde, arriba
+   a la derecha). El boton muestra cuantos cambios faltan publicar.
+5. Confirma. El banner pasa a "Publicando a produccion..." y, cuando termina,
+   te avisa "Publicado en produccion" con el enlace al sitio en vivo.
+
+Si algo falla, el banner avisa con un mensaje en rojo. En ese caso, vuelve a
+intentar; si persiste, avisa al equipo.
 
 ---
 

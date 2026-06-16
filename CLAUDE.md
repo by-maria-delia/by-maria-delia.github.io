@@ -1,7 +1,7 @@
 # Maria Delia - Project Guide
 
 ## Stack
-React 19 + TypeScript 5.9 + Vite 7 + Tailwind CSS 4. Content authored in-repo and edited via Sveltia CMS. Linting: ESLint + Biome. Deployed via gh-pages.
+React 19 + TypeScript 5.9 + Vite 7 + Tailwind CSS 4. Content authored in-repo and edited via Sveltia CMS. Linting: ESLint + Biome. Deployed via the official GitHub Pages action on push to `main`; staging is on Netlify from the `preview` branch.
 
 ## Commands
 - `yarn dev`: start dev server
@@ -11,7 +11,7 @@ React 19 + TypeScript 5.9 + Vite 7 + Tailwind CSS 4. Content authored in-repo an
 
 ## Data Flow
 - All content lives in-repo under `src/content/` as JSON, loaded by typed `.ts` loaders and exposed through hooks in `src/data/index.ts`. There are **zero runtime API calls** (no Google Sheets/Drive).
-- Non-technical editors manage content through **Sveltia CMS** at `/admin/` (GitHub backend); each save commits to `main` and auto-deploys. See `docs/cms-auth-setup.md`.
+- Non-technical editors manage content through **Sveltia CMS** at `/admin/` (GitHub backend). Saves commit to the **`preview`** branch (not `main`); Netlify auto-deploys it to `https://maria-delia-preview.netlify.app/`. The editor then clicks **Publicar a produccion** in `/admin/`, which dispatches `.github/workflows/promote.yml` to fast-forward `main` to `preview`. The push to `main` triggers `.github/workflows/deploy.yml` (official GitHub Pages action) and the live site updates. See `docs/cms-auth-setup.md` and `docs/handoff-staging-branch.md`.
 - Products filter by `disponible === "TRUE"`, gallery by `visible === "TRUE"`.
 - Customizer modal collects size/pocket/print selections, then opens WhatsApp with a pre-filled message.
 

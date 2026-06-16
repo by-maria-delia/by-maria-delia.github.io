@@ -82,8 +82,21 @@ export default function Footer() {
 			</div>
 
 			<div className="max-w-6xl px-5 mx-auto">
-				<div className="py-4 text-[.82rem] font-semibold border-t text-white/60 border-white/15">
-					&copy; {new Date().getFullYear()} {brandName}. {footer.copyright}
+				<div className="flex flex-col gap-1.5 py-4 text-[.82rem] font-semibold border-t text-white/60 border-white/15 sm:flex-row sm:items-center sm:justify-between">
+					<span>
+						&copy; {new Date().getFullYear()} {brandName}. {footer.copyright}
+					</span>
+					<span>
+						Hecho por{" "}
+						<a
+							href="http://lucas-avendano.netlify.app/"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="font-bold transition-colors text-white/80 hover:text-butter"
+						>
+							Lucas Avendaño
+						</a>
+					</span>
 				</div>
 			</div>
 		</footer>

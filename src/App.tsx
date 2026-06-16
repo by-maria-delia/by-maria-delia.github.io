@@ -8,7 +8,7 @@ import Showcase from "./components/Showcase";
 
 export default function App() {
 	return (
-		<div className="min-h-screen bg-soft-white">
+		<div id="top" className="min-h-screen bg-cream">
 			<Navbar />
 			<main>
 				<Hero />

@@ -10,75 +10,93 @@ export default function Footer() {
 		footer,
 	} = useSiteContent();
 
+	const linkClass =
+		"inline-flex items-center gap-2.5 font-bold font-head text-white/85 transition-colors hover:text-butter";
+
 	return (
-		<footer id="contacto" className="bg-denim-blue text-white/90">
-			<div className="max-w-5xl px-5 mx-auto py-14">
-				{/* Top section */}
-				<div className="flex flex-col gap-10 mb-12 sm:flex-row sm:items-start sm:justify-between">
-					{/* Brand */}
-					<div>
-						<p className="mb-2 text-3xl tracking-tight text-white font-display">
-							{brandName}
-						</p>
-						<p className="max-w-xs text-sm text-school-blue/80">{tagline}</p>
-					</div>
-
-					{/* Contact links */}
-					<div className="flex flex-col gap-3 text-sm">
-						<a
-							href={`https://wa.me/${whatsappNumber}`}
-							target="_blank"
-							rel="noopener noreferrer"
-							className="inline-flex items-center gap-2 transition-colors text-white/70 hover:text-white"
-						>
-							<svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-								<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
-								<path d="M12 0C5.373 0 0 5.373 0 12c0 2.116.553 4.104 1.519 5.834L0 24l6.335-1.478A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.787 9.787 0 01-5.09-1.42l-.365-.217-3.786.993.992-3.622-.237-.377A9.792 9.792 0 012.182 12 9.818 9.818 0 0112 2.182 9.818 9.818 0 0121.818 12 9.818 9.818 0 0112 21.818z" />
-							</svg>
-							{footer.whatsappLabel}
-						</a>
-
-						<a
-							href={instagramUrl}
-							target="_blank"
-							rel="noopener noreferrer"
-							className="inline-flex items-center gap-2 transition-colors text-white/70 hover:text-white"
-						>
-							<svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-								<path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
-							</svg>
-							{instagramHandle}
-						</a>
-
-						<span className="inline-flex items-center gap-2 text-white/60">
-							<svg
-								className="w-4 h-4"
-								fill="none"
-								stroke="currentColor"
-								strokeWidth={1.5}
-								viewBox="0 0 24 24"
-							>
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-								/>
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-								/>
-							</svg>
-							{footer.location}
-						</span>
-					</div>
+		<footer id="contacto" className="text-white bg-sky-ink">
+			<div className="flex flex-col gap-8 px-5 py-14 mx-auto max-w-6xl md:flex-row md:items-start md:justify-between">
+				<div>
+					<div className="text-3xl font-display">María Delia</div>
+					<p className="max-w-[34ch] mt-2 font-semibold text-sky/85">
+						{tagline}
+					</p>
 				</div>
 
-				{/* Bottom bar */}
-				<div className="flex flex-col items-center justify-between gap-3 pt-6 text-xs border-t border-white/10 sm:flex-row text-white/60">
-					<p>
+				<div className="flex flex-col gap-3.5">
+					<a
+						href={`https://wa.me/${whatsappNumber}`}
+						target="_blank"
+						rel="noopener noreferrer"
+						className={linkClass}
+					>
+						<svg
+							className="w-4.5 h-4.5 shrink-0"
+							viewBox="0 0 24 24"
+							fill="currentColor"
+						>
+							<path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-1 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-1-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3z" />
+							<path d="M12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.1 1.5 5.8L0 24l6.3-1.5c1.7.9 3.6 1.4 5.6 1.4 6.6 0 12-5.4 12-12S18.6 0 12 0z" />
+						</svg>
+						{footer.whatsappLabel}
+					</a>
+
+					<a
+						href={instagramUrl}
+						target="_blank"
+						rel="noopener noreferrer"
+						className={linkClass}
+					>
+						<svg
+							className="w-4.5 h-4.5 shrink-0"
+							viewBox="0 0 24 24"
+							fill="currentColor"
+						>
+							<path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85 0 3.2-.01 3.58-.07 4.85-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07-3.2 0-3.58-.01-4.85-.07-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.64-.07-4.85 0-3.2.01-3.58.07-4.85.15-3.23 1.66-4.77 4.92-4.92C8.42 2.17 8.8 2.16 12 2.16zM12 0C8.74 0 8.33.01 7.05.07 2.7.27.27 2.69.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.2 4.36 2.62 6.78 6.98 6.98C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c4.35-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.2-4.35-2.62-6.78-6.98-6.98C15.67.01 15.26 0 12 0zm0 5.84a6.16 6.16 0 100 12.32 6.16 6.16 0 000-12.32zM12 16a4 4 0 110-8 4 4 0 010 8zm6.41-11.85a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z" />
+						</svg>
+						{instagramHandle}
+					</a>
+
+					<span className="inline-flex items-center gap-2.5 font-bold font-head text-white/65">
+						<svg
+							className="w-4.5 h-4.5 shrink-0"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							strokeWidth={1.6}
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
+							/>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								d="M19.5 10.5c0 7.14-7.5 11.25-7.5 11.25S4.5 17.64 4.5 10.5a7.5 7.5 0 1115 0z"
+							/>
+						</svg>
+						{footer.location}
+					</span>
+				</div>
+			</div>
+
+			<div className="max-w-6xl px-5 mx-auto">
+				<div className="flex flex-col gap-1.5 py-4 text-[.82rem] font-semibold border-t text-white/60 border-white/15 sm:flex-row sm:items-center sm:justify-between">
+					<span>
 						&copy; {new Date().getFullYear()} {brandName}. {footer.copyright}
-					</p>
+					</span>
+					<span>
+						Hecho por{" "}
+						<a
+							href="http://lucas-avendano.netlify.app/"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="font-bold transition-colors text-white/80 hover:text-butter"
+						>
+							Lucas Avendaño
+						</a>
+					</span>
 				</div>
 			</div>
 		</footer>

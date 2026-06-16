@@ -1,107 +1,147 @@
 @import "tailwindcss";
 
 @theme {
-  /* New palette */
-  --color-janna: #F4EED7;
-  /* main backgrounds */
-  --color-spanish-white: #EAD0C3;
-  /* card backgrounds, image placeholders */
-  --color-jet-stream: #BED5CF;
-  /* primary UI highlights, hover accents */
-  --color-bison-hide: #C8BDAC;
-  /* borders, dividers, subtle surfaces */
-  --color-bud: #666058;
-  /* secondary text, muted labels */
+	/* Recreo palette */
+	--color-cream: #fffdf9;
+	/* main background */
+	--color-sand: #f4f0e8;
+	/* subtle surfaces */
+	--color-sky: #c3e1f2;
+	/* soft blue surfaces, highlights */
+	--color-sky-deep: #5e93b5;
+	/* primary blue buttons */
+	--color-sky-ink: #3e6c8a;
+	/* dark blue, headings on light blue */
+	--color-pink: #f8c7d7;
+	/* soft pink surfaces */
+	--color-pink-deep: #e486a4;
+	/* primary CTA accent */
+	--color-butter: #fbeaae;
+	/* warm yellow surfaces */
+	--color-butter-deep: #d7a93b;
+	/* warm yellow accent */
+	--color-mint: #c9e9d5;
+	/* soft green surfaces */
+	--color-mint-deep: #65ae85;
+	/* green accent, WhatsApp pill */
+	--color-ink: #3d4651;
+	/* main text */
+	--color-muted: #737e8b;
+	/* secondary text */
+	--color-line: #ece6dc;
+	/* borders, dividers */
 
-  /* Semantic aliases — components reference these */
-  --color-soft-white: #F4EED7;
-  --color-cream: #EAD0C3;
-  --color-school-blue: #BED5CF;
-  --color-school-blue-dark: #9ABFB8;
-  --color-denim-blue: #4a4540;
-  /* headings, primary buttons — dark earthy */
-  --color-leaf-green: #5E7D6A;
-  --color-teacher-pink: #C0785E;
-  /* warm terracotta to complement the palette */
-  --color-warm-yellow: #E3C567;
-  --color-floral-teal: #BED5CF;
-  --color-dark-text: #2e2a26;
-  --color-soft-gray: #666058;
-
-  --font-display: 'Oooh Baby', cursive;
-  --font-body: 'Nunito', sans-serif;
-  --font-handwritten: 'Shadows Into Light', cursive;
+	--font-display: "Oooh Baby", cursive;
+	--font-head: "Baloo 2", "Trebuchet MS", Verdana, sans-serif;
+	--font-body: "Nunito", sans-serif;
 }
 
-html {
-	scroll-behavior: smooth;
-}
-
-body {
-	margin: 0;
-	font-family: var(--font-body);
-	color: var(--color-dark-text);
-	background-color: var(--color-soft-white);
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-}
-
-/* Noise texture overlay for depth */
-body::after {
-	content: "";
-	position: fixed;
-	inset: 0;
-	pointer-events: none;
-	z-index: 9999;
-	opacity: 0.35;
-	background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-	background-repeat: repeat;
-	background-size: 256px 256px;
-}
-
-/* Typography refinements */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	text-wrap: balance;
-}
-
-p {
-	text-wrap: pretty;
-}
-
-/* Focus ring for accessibility */
-:focus-visible {
-	outline: 2px solid var(--color-school-blue);
-	outline-offset: 2px;
-}
-
-/* Staggered fade-in animation */
-@keyframes fade-up {
-	from {
-		opacity: 0;
-		transform: translateY(20px);
+/* Base element styles live in @layer base so Tailwind utilities
+   (e.g. font-display on the hero h1) reliably override them. */
+@layer base {
+	html {
+		scroll-behavior: smooth;
 	}
 
-	to {
-		opacity: 1;
-		transform: translateY(0);
+	body {
+		margin: 0;
+		font-family: var(--font-body);
+		color: var(--color-ink);
+		background-color: var(--color-cream);
+		line-height: 1.625;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	/* Typography refinements */
+	h1,
+	h2,
+	h3,
+	h4 {
+		font-family: var(--font-head);
+		font-weight: 700;
+		line-height: 1.15;
+		text-wrap: balance;
+	}
+
+	p {
+		text-wrap: pretty;
+	}
+
+	/* Focus ring for accessibility */
+	:focus-visible {
+		outline: 2px solid var(--color-sky-deep);
+		outline-offset: 2px;
+		border-radius: 0.25rem;
 	}
 }
 
-@keyframes fade-in {
-	from {
-		opacity: 0;
-	}
-
-	to {
-		opacity: 1;
-	}
+/* Button press feedback */
+.btn-press:active {
+	transform: scale(0.97) translateY(1px);
 }
 
+/* Smooth scrollbar */
+.custom-scrollbar {
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-line) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+	background: var(--color-line);
+	border-radius: 999px;
+}
+
+/* Scroll-reveal animations (toggled via .in-view by IntersectionObserver) */
+.animate-fade-up {
+	opacity: 0;
+	transform: translateY(22px);
+	transition:
+		opacity 0.6s ease-out,
+		transform 0.6s ease-out;
+}
+
+.animate-fade-up.in-view {
+	opacity: 1;
+	transform: none;
+}
+
+.animate-fade-in {
+	opacity: 0;
+	transition: opacity 0.4s ease-out;
+}
+
+.animate-fade-in.in-view {
+	opacity: 1;
+}
+
+/* Stagger delays */
+.delay-1 {
+	transition-delay: 0.08s;
+}
+
+.delay-2 {
+	transition-delay: 0.16s;
+}
+
+.delay-3 {
+	transition-delay: 0.24s;
+}
+
+.delay-4 {
+	transition-delay: 0.32s;
+}
+
+.delay-5 {
+	transition-delay: 0.4s;
+}
+
+/* Mobile menu reveal */
 @keyframes slide-down {
 	from {
 		opacity: 0;
@@ -114,130 +154,55 @@ p {
 	}
 }
 
-.animate-fade-up {
-	opacity: 0;
-	transform: translateY(20px);
-	transition:
-		opacity 0.6s ease-out,
-		transform 0.6s ease-out;
-}
-
-.animate-fade-up.in-view {
-	opacity: 1;
-	transform: translateY(0);
-}
-
-.animate-fade-in {
-	opacity: 0;
-	transition: opacity 0.5s ease-out;
-}
-
-.animate-fade-in.in-view {
-	opacity: 1;
-}
-
 .animate-slide-down {
 	animation: slide-down 0.3s ease-out both;
 }
 
-/* Stagger delays */
-.delay-1 {
-	animation-delay: 0.1s;
-}
-
-.delay-2 {
-	animation-delay: 0.2s;
-}
-
-.delay-3 {
-	animation-delay: 0.3s;
-}
-
-.delay-4 {
-	animation-delay: 0.4s;
-}
-
-.delay-5 {
-	animation-delay: 0.5s;
-}
-
-/* Button press feedback */
-.btn-press:active {
-	transform: scale(0.97) translateY(1px);
-}
-
-/* Smooth scrollbar */
-::-webkit-scrollbar,
-.custom-scrollbar::-webkit-scrollbar {
-	width: 8px;
-	height: 8px;
-}
-
-::-webkit-scrollbar-track,
-.custom-scrollbar::-webkit-scrollbar-track {
-	background: var(--color-janna);
-}
-
-::-webkit-scrollbar-thumb,
-.custom-scrollbar::-webkit-scrollbar-thumb {
-	background: var(--color-bison-hide);
-	border-radius: 999px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track-piece {
-	background: var(--color-janna);
-}
-
-/* Standard scrollbar (Firefox, Android Chrome 121+) */
-.custom-scrollbar {
-	scrollbar-width: thin;
-	scrollbar-color: var(--color-bison-hide) var(--color-janna);
-}
-
-.model-mask-shadow {
-	filter: drop-shadow(1px 1px 1px var(--color-denim-blue))
-		drop-shadow(-1px -1px 1px var(--color-denim-blue));
-}
-
-@keyframes slide-up-sheet {
+/* Customizer bottom-sheet + submit-ready motion */
+@keyframes sheet-up {
 	from {
 		transform: translateY(100%);
 		opacity: 0.6;
 	}
+
 	to {
 		transform: translateY(0);
 		opacity: 1;
 	}
 }
 
-.animate-sheet-up {
-	animation: slide-up-sheet 0.4s cubic-bezier(0.25, 1, 0.5, 1) both;
-}
-
 @keyframes button-ready {
 	0% {
 		transform: scale(1);
 	}
+
 	30% {
 		transform: scale(1.03);
 	}
+
 	60% {
 		transform: scale(0.99);
 	}
+
 	100% {
 		transform: scale(1);
 	}
 }
 
 @keyframes listo-in {
-	0% {
+	from {
 		opacity: 0;
 		transform: translateY(5px);
 	}
-	100% {
+
+	to {
 		opacity: 1;
-		transform: translateY(0);
+		transform: none;
 	}
+}
+
+.animate-sheet-up {
+	animation: sheet-up 0.4s cubic-bezier(0.25, 1, 0.5, 1) both;
 }
 
 .animate-button-ready {
@@ -249,17 +214,16 @@ p {
 }
 
 @media (prefers-reduced-motion: reduce) {
+	.animate-sheet-up,
 	.animate-button-ready,
 	.animate-listo-in {
 		animation: none;
 	}
-}
 
-.model-mask-shadow-inner {
-	filter: drop-shadow(
-			-1px 0px 0px color-mix(in srgb, var(--color-dark-text) 57%, transparent)
-		)
-		drop-shadow(
-			1px 0px 0px color-mix(in srgb, var(--color-dark-text) 57%, transparent)
-		);
+	.animate-fade-up,
+	.animate-fade-in {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
 }

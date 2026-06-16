@@ -6,6 +6,7 @@ export function buildWhatsAppURL({
 	size,
 	pockets,
 	tipo_de_estampado,
+	base,
 	extra_comments,
 }: WhatsAppParams): string {
 	const lines = [
@@ -14,6 +15,7 @@ export function buildWhatsAppURL({
 		`Talle: *${size}*`,
 		`Tipo de bolsillo: *${pockets}*`,
 		`Estampado: *${tipo_de_estampado}*`,
+		`Base: *${base}*`,
 	];
 
 	if (extra_comments) {

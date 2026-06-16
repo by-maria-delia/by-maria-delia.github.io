@@ -1,9 +1,9 @@
 import type { OptionImage } from "../types";
 
 /**
- * Loads the global Customizer option collections (stamps and pockets) from
- * in-repo content. Files are eagerly bundled at build time, so there are zero
- * network requests. Order follows the filename (alphabetical).
+ * Loads the global Customizer option collections (stamps, pockets and bases)
+ * from in-repo content. Files are eagerly bundled at build time, so there are
+ * zero network requests. Order follows the filename (alphabetical).
  */
 const load = (modules: Record<string, OptionImage>): OptionImage[] =>
 	Object.keys(modules)
@@ -19,6 +19,13 @@ export const stamps: OptionImage[] = load(
 
 export const pockets: OptionImage[] = load(
 	import.meta.glob<OptionImage>("./pockets/*.json", {
+		eager: true,
+		import: "default",
+	}),
+);
+
+export const bases: OptionImage[] = load(
+	import.meta.glob<OptionImage>("./bases/*.json", {
 		eager: true,
 		import: "default",
 	}),

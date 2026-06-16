@@ -49,8 +49,10 @@ export default function ImageCarousel({
 
 	return (
 		<div className={className}>
-			{/* Relative wrapper: nav arrows are positioned here, outside Swiper's overflow-hidden */}
-			<div className="relative">
+			{/* Relative wrapper: nav arrows are positioned here, outside Swiper's overflow-hidden.
+			    Desktop side gutters (md:px-12) keep the arrows beside the image, not on top of it,
+			    so the hover-zoom boundary is never crossed and no image content is hidden. */}
+			<div className="relative md:px-9">
 				{/* Mouse event boundary for desktop hover zoom */}
 				<div
 					ref={containerRef}
@@ -129,13 +131,9 @@ export default function ImageCarousel({
 							type="button"
 							aria-label="Imagen anterior"
 							onClick={() => swiperInstance?.slidePrev()}
-							className="absolute z-10 grid w-10 h-10 transition rounded-full shadow left-2.5 top-1/2 -translate-y-1/2 place-items-center cursor-pointer bg-white/90 hover:bg-white text-ink btn-press"
+							className="absolute z-10 grid w-10 h-10 md:w-9 md:h-9 transition rounded-full shadow left-2.5 md:left-0 top-1/2 -translate-y-1/2 place-items-center cursor-pointer bg-white/90 hover:bg-white text-ink btn-press"
 						>
-							<svg
-								className="w-5 h-5"
-								viewBox="0 0 24 24"
-								fill="none"
-							>
+							<svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
 								<path
 									d="M15 18l-6-6 6-6"
 									stroke="currentColor"
@@ -149,13 +147,9 @@ export default function ImageCarousel({
 							type="button"
 							aria-label="Imagen siguiente"
 							onClick={() => swiperInstance?.slideNext()}
-							className="absolute z-10 grid w-10 h-10 transition rounded-full shadow right-2.5 top-1/2 -translate-y-1/2 place-items-center cursor-pointer bg-white/90 hover:bg-white text-ink btn-press"
+							className="absolute z-10 grid w-10 h-10 md:w-9 md:h-9 transition rounded-full shadow right-2.5 md:right-0 top-1/2 -translate-y-1/2 place-items-center cursor-pointer bg-white/90 hover:bg-white text-ink btn-press"
 						>
-							<svg
-								className="w-5 h-5"
-								viewBox="0 0 24 24"
-								fill="none"
-							>
+							<svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
 								<path
 									d="M9 18l6-6-6-6"
 									stroke="currentColor"

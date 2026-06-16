@@ -153,7 +153,7 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 				aria-labelledby="customizer-title"
 				tabIndex={-1}
 				className={cn(
-					"flex flex-col w-full overflow-hidden bg-white outline-none max-w-5xl max-h-[92dvh] rounded-t-3xl sm:rounded-3xl shadow-2xl shadow-ink/10",
+					"flex flex-col w-full overflow-hidden bg-white outline-none max-w-7xl max-h-[92dvh] rounded-t-3xl sm:rounded-3xl shadow-2xl shadow-ink/10",
 					isMobile ? "animate-sheet-up" : "animate-fade-up in-view",
 				)}
 			>
@@ -184,7 +184,7 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 					</button>
 				</div>
 
-				<div className="p-5 overflow-y-auto md:p-6 md:grid md:grid-cols-[0.92fr_1fr] md:gap-7 md:overflow-hidden">
+				<div className="p-5 overflow-y-auto md:p-6 md:grid md:grid-cols-2 md:gap-7 md:overflow-hidden">
 					{/* Product images */}
 					<ImageCarousel
 						images={carouselImages}
@@ -254,7 +254,7 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 												key={image.nombre}
 												onClick={() => setPockets(displayName)}
 												className={cn(
-													"btn-press relative rounded-xl border-2 overflow-hidden transition-all shrink-0 w-28 cursor-pointer",
+													"flex flex-col btn-press relative rounded-xl border-2 overflow-hidden transition-all shrink-0 w-28 cursor-pointer",
 													selected
 														? "border-pink-deep ring-2 ring-pink-deep/20 shadow-md"
 														: "border-ink/15 hover:border-pink-deep/30",
@@ -295,19 +295,19 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 												key={image.nombre}
 												onClick={() => setEstampado(displayName)}
 												className={cn(
-													"btn-press relative rounded-xl border-2 overflow-hidden transition-all shrink-0 w-28 cursor-pointer",
+													"flex flex-col btn-press relative rounded-xl border-2 overflow-hidden transition-all shrink-0 w-28 cursor-pointer",
 													selected
 														? "border-pink-deep ring-2 ring-pink-deep/20 shadow-md"
 														: "border-ink/15 hover:border-pink-deep/30",
 												)}
 											>
 												{selected && <CheckTick />}
-												<div className="aspect-square bg-sand">
+												<div className="bg-sand">
 													<img
 														src={image.imagen}
 														alt={displayName}
 														loading="lazy"
-														className="object-cover w-full h-full"
+														className="object-cover w-full h-28"
 													/>
 												</div>
 												<p className="p-2 text-xs font-bold leading-tight text-center text-ink">
@@ -336,7 +336,7 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 												key={image.nombre}
 												onClick={() => setBase(displayName)}
 												className={cn(
-													"btn-press relative rounded-xl border-2 overflow-hidden transition-all shrink-0 w-28 cursor-pointer",
+													"flex flex-col btn-press relative rounded-xl border-2 overflow-hidden transition-all shrink-0 w-28 cursor-pointer",
 													selected
 														? "border-pink-deep ring-2 ring-pink-deep/20 shadow-md"
 														: "border-ink/15 hover:border-pink-deep/30",
@@ -391,7 +391,7 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 									: "bg-ink/15 text-ink/40 cursor-not-allowed",
 							)}
 						>
-							<span className="inline-flex items-center justify-center gap-2.5">
+							<span className="flex items-center justify-center gap-2.5">
 								<svg
 									className="w-5.5 h-5.5"
 									viewBox="0 0 24 24"

@@ -1,7 +1,7 @@
 /*
  * Banner de estado de publicacion para Sveltia CMS.
  *
- * Flujo (post staging branch, ver docs/handoff-staging-branch.md):
+ * Flujo:
  *
  *  1. La editora guarda en /admin/. El commit va a la rama `preview`.
  *  2. Netlify despliega la vista previa en ~1 minuto. El banner avisa:

@@ -1,7 +1,10 @@
 {
-	"nombre": "Modelo Prueba",
-	"precio": 46000,
-	"descripcion": "ajsdkajsdkasjd asndaksdnkasn asjd asdjas d",
-	"disponible": false,
-	"imagenes": []
+  "nombre": "Manga Ranglan",
+  "precio": 49000,
+  "precioTexto": "",
+  "descripcion": "Su sencillez y corte en diagonal en sus mangas, lo hacen único y cómodo.\nTela Arciel Inta.",
+  "disponible": false,
+  "imagenes": [
+    "/media/505003.webp"
+  ]
 }

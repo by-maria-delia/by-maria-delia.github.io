@@ -29,9 +29,24 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch origin preview
+          git fetch origin preview main
+
+          # Self-heal: if main has commits not in preview (e.g. a docs PR landed
+          # directly on main), merge main into preview first so the FF below
+          # can succeed. Netlify will rebuild preview with the same content
+          # plus the main-side commits, which is the correct end state.
+          if [ -n "$(git log --oneline origin/preview..origin/main)" ]; then
+            echo "main has commits not in preview; auto-merging main into preview"
+            git checkout -B preview-sync origin/preview
+            git merge origin/main --no-edit \
+              -m "Merge main into preview (auto-sync before promote)"
+            git push origin preview-sync:preview
+            git fetch origin preview
+            git checkout main
+          fi
+
           if ! git merge --ff-only origin/preview; then
-            echo "::error::main has diverged from preview. A developer must rebase preview onto main before promoting."
+            echo "::error::main could not fast-forward to preview even after auto-sync. Inspect branch state manually."
             exit 1
           fi
           git push origin main

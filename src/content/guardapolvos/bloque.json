@@ -1,8 +1,8 @@
 {
-  "nombre": "Bloque",
-  "precio": 50000,
+  "nombre": "Cuello redondo",
+  "precio": 49000,
   "precioTexto": "",
-  "descripcion": "Arquitectura hecha tela. Su diseño limpio y definido habla de una mujer segura, práctica y con estilo propio.",
+  "descripcion": "Telas Arciel Inta.",
   "disponible": true,
   "imagenes": [
     "/media/guardapolvos/bloque.png"

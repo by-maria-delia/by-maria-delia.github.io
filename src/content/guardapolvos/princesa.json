@@ -1,8 +1,8 @@
 {
-  "nombre": "Princesa",
-  "precio": 50000,
+  "nombre": "Vestido",
+  "precio": 49000,
   "precioTexto": "",
-  "descripcion": "Con su corte imperio y falda amplia, transforma cada jornada en algo especial. Porque toda princesa merece sentirse así, todos los días.",
+  "descripcion": "Con su corte imperio y falda amplia, transforma cada jornada en algo especial.\nTela Arciel Inta",
   "disponible": true,
   "imagenes": [
     "/media/guardapolvos/princesa.png"

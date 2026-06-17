@@ -1,7 +1,10 @@
 {
-	"nombre": "Mariposa",
-	"precio": 15000,
-	"descripcion": "Liviana y femenina, sus mangas con vuelo la hacen perfecta para moverse con gracia. Como una mariposa, siempre lista para volar.",
-	"disponible": true,
-	"imagenes": ["/media/guardapolvos/mariposa.png"]
+  "nombre": "Mariposa",
+  "precio": 49000,
+  "precioTexto": "",
+  "descripcion": "Sus mangas con vuelo lo hacen perfecto para moverse con gracia. \nTelas Arciel Inta",
+  "disponible": true,
+  "imagenes": [
+    "/media/guardapolvos/mariposa.png"
+  ]
 }

@@ -1,0 +1,10 @@
+{
+  "nombre": "Blanco formal",
+  "precio": 49000,
+  "precioTexto": "",
+  "descripcion": "Clásico y cómodo.\nTela Arciel Inta.",
+  "disponible": true,
+  "imagenes": [
+    "/media/504941.webp"
+  ]
+}

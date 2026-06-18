@@ -10,7 +10,7 @@ React 19 + TypeScript 5.9 + Vite 7 + Tailwind CSS 4. Content authored in-repo an
 - `yarn deploy`: build + deploy to GitHub Pages
 
 ## Data Flow
-- All content lives in-repo under `src/content/` as JSON, loaded by typed `.ts` loaders and exposed through hooks in `src/data/index.ts`. There are **zero runtime API calls** (no Google Sheets/Drive).
+- All content lives in-repo under `src/content/` as JSON, loaded by typed `.ts` loaders and exposed through hooks in `src/data/index.ts`. There are **zero runtime API calls** (no Google Sheets/Drive). One outbound beacon (Umami analytics) fires on production only; see Analytics below.
 - Non-technical editors manage content through **Sveltia CMS** at `/admin/` (GitHub backend). Saves commit to the **`preview`** branch (not `main`); Netlify auto-deploys it to `https://maria-delia-preview.netlify.app/`. The editor then clicks **Publicar a produccion** in `/admin/`, which dispatches `.github/workflows/promote.yml` to fast-forward `main` to `preview`. The push to `main` triggers `.github/workflows/deploy.yml` (official GitHub Pages action) and the live site updates. See `docs/cms-auth-setup.md` and `docs/handoff-staging-branch.md`.
 - Products filter by `disponible === "TRUE"`, gallery by `visible === "TRUE"`.
 - Customizer modal collects size/pocket/print selections, then opens WhatsApp with a pre-filled message.
@@ -45,6 +45,9 @@ Section backgrounds flow through SVG wave dividers (cream → sky → cream → 
 
 ### Brand Personality
 Artesanal, calido, prolijo, clasico, amigable, docente, femenino. All copy in **Spanish (Argentina)**.
+
+## Analytics
+Umami Cloud, cookieless. The `<script>` in `index.html` carries `data-domains="by-maria-delia.github.io"`, so dev and Netlify preview produce zero beacons. Custom events go through `src/utils/analytics.ts` `track(name, props)` (typed, no-ops if Umami fails to load). Three custom events: `customizer_open` (`model_name`), `whatsapp_click` (`model_name`, `size`, `base`, `pockets`, `estampado`, this is the conversion), `social_click` (`platform`, `location`). Auto pageviews on top. Explicitly NOT tracked in v1: per-step customizer drop-off, `lightbox_open`, error/perf monitoring, and there is no custom "Mis números" page (Umami's Share URL is used instead). Rationale in `docs/adr/0002-umami-analytics.md`.
 
 ## Conventions
 - Locale: `es-AR` for price formatting (`toLocaleString("es-AR")`)

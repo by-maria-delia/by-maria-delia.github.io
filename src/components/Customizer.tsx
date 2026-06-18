@@ -8,6 +8,7 @@ import {
 } from "../data";
 import useIsMobile from "../hooks/useIsMobile";
 import type { CarouselImage, Product } from "../types";
+import { track } from "../utils/analytics";
 import { cn } from "../utils/cn";
 import { formatPrice } from "../utils/formatPrice";
 import { buildWhatsAppURL } from "../utils/whatsapp";
@@ -131,6 +132,13 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 
 	function handleSubmit() {
 		if (!isValid) return;
+		track("whatsapp_click", {
+			model_name: product.nombre,
+			size,
+			base,
+			pockets,
+			estampado,
+		});
 		const url = buildWhatsAppURL({
 			model_name: product.nombre,
 			size,

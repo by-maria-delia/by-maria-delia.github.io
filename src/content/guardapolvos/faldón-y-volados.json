@@ -1,0 +1,10 @@
+{
+  "nombre": "Faldón y volados",
+  "precio": 53000,
+  "precioTexto": "",
+  "descripcion": "Delicado y elegante.\nTela Arciel Inta.",
+  "disponible": true,
+  "imagenes": [
+    "/media/507936.webp"
+  ]
+}

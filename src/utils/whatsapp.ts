@@ -13,9 +13,9 @@ export function buildWhatsAppURL({
 		"Hola! Quiero consultar por este guardapolvo:",
 		`Modelo: *${model_name}*`,
 		`Talle: *${size}*`,
-		`Tipo de bolsillo: *${pockets}*`,
-		`Estampado: *${tipo_de_estampado}*`,
 		`Base: *${base}*`,
+		`Tipo de bolsillo: *${pockets}*`,
+		`Estampado del bolsillo: *${tipo_de_estampado}*`,
 	];
 
 	if (extra_comments) {

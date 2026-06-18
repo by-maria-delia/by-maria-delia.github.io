@@ -92,6 +92,8 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 		// Wrap Tab at boundaries
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (e.key !== "Tab") return;
+			// Pause when a child overlay (e.g. image lightbox) owns the focus loop.
+			if (document.querySelector("[data-lightbox-active]")) return;
 			const focusable = getFocusable();
 			if (focusable.length === 0) return;
 
@@ -109,6 +111,7 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 
 		// Pull focus back if it escapes (e.g. browser chrome round-trip)
 		const handleFocusIn = (e: FocusEvent) => {
+			if (document.querySelector("[data-lightbox-active]")) return;
 			if (!dialog.contains(e.target as Node)) {
 				const focusable = getFocusable();
 				if (focusable.length > 0) focusable[0].focus();
@@ -238,11 +241,52 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 							</fieldset>
 						)}
 
+						{/* Base selector */}
+						{baseImages.length > 0 && (
+							<fieldset className="flex flex-col gap-2.5 min-w-0">
+								<legend className="font-bold font-head text-ink">
+									2 · Base <span className="text-pink-deep">*</span>
+								</legend>
+								<div className="flex gap-3 px-1 py-2.5 overflow-x-auto custom-scrollbar">
+									{baseImages.map((image) => {
+										const displayName = image.nombre;
+										const selected = base === displayName;
+										return (
+											<button
+												type="button"
+												key={image.nombre}
+												onClick={() => setBase(displayName)}
+												className={cn(
+													"flex flex-col btn-press relative rounded-xl border-2 overflow-hidden transition-all shrink-0 w-28 cursor-pointer",
+													selected
+														? "border-pink-deep ring-2 ring-pink-deep/20 shadow-md"
+														: "border-ink/15 hover:border-pink-deep/30",
+												)}
+											>
+												{selected && <CheckTick />}
+												<div className="bg-sand">
+													<img
+														src={image.imagen}
+														alt={displayName}
+														loading="lazy"
+														className="object-contain w-full h-22"
+													/>
+												</div>
+												<p className="p-2 text-xs font-bold leading-tight text-center text-ink">
+													{displayName}
+												</p>
+											</button>
+										);
+									})}
+								</div>
+							</fieldset>
+						)}
+
 						{/* Pockets selector */}
 						{pocketsImages.length > 0 && (
 							<fieldset className="flex flex-col gap-2.5 min-w-0">
 								<legend className="font-bold font-head text-ink">
-									2 · Tipo de bolsillo <span className="text-pink-deep">*</span>
+									3 · Tipo de bolsillo <span className="text-pink-deep">*</span>
 								</legend>
 								<div className="flex gap-3 px-1 py-2.5 overflow-x-auto custom-scrollbar">
 									{pocketsImages.map((image) => {
@@ -283,7 +327,8 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 						{stampImages.length > 0 && (
 							<fieldset className="flex flex-col gap-2.5 min-w-0">
 								<legend className="font-bold font-head text-ink">
-									3 · Estampado <span className="text-pink-deep">*</span>
+									4 · Estampado del bolsillo{" "}
+									<span className="text-pink-deep">*</span>
 								</legend>
 								<div className="flex gap-3 px-1 py-2.5 overflow-x-auto custom-scrollbar">
 									{stampImages.map((image) => {
@@ -308,47 +353,6 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 														alt={displayName}
 														loading="lazy"
 														className="object-cover w-full h-28"
-													/>
-												</div>
-												<p className="p-2 text-xs font-bold leading-tight text-center text-ink">
-													{displayName}
-												</p>
-											</button>
-										);
-									})}
-								</div>
-							</fieldset>
-						)}
-
-						{/* Base selector */}
-						{baseImages.length > 0 && (
-							<fieldset className="flex flex-col gap-2.5 min-w-0">
-								<legend className="font-bold font-head text-ink">
-									4 · Base <span className="text-pink-deep">*</span>
-								</legend>
-								<div className="flex gap-3 px-1 py-2.5 overflow-x-auto custom-scrollbar">
-									{baseImages.map((image) => {
-										const displayName = image.nombre;
-										const selected = base === displayName;
-										return (
-											<button
-												type="button"
-												key={image.nombre}
-												onClick={() => setBase(displayName)}
-												className={cn(
-													"flex flex-col btn-press relative rounded-xl border-2 overflow-hidden transition-all shrink-0 w-28 cursor-pointer",
-													selected
-														? "border-pink-deep ring-2 ring-pink-deep/20 shadow-md"
-														: "border-ink/15 hover:border-pink-deep/30",
-												)}
-											>
-												{selected && <CheckTick />}
-												<div className="bg-sand">
-													<img
-														src={image.imagen}
-														alt={displayName}
-														loading="lazy"
-														className="object-contain w-full h-22"
 													/>
 												</div>
 												<p className="p-2 text-xs font-bold leading-tight text-center text-ink">

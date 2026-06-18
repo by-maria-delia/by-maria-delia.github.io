@@ -1,4 +1,5 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
 import "swiper/css/zoom";
@@ -10,6 +11,111 @@ import { cn } from "../utils/cn";
 import ImagePlaceholder from "./ImagePlaceholder";
 
 const ZOOM = 2;
+
+interface LightboxProps {
+	images: CarouselImage[];
+	productName: string;
+	initialIndex: number;
+	onClose: (finalIndex?: number) => void;
+}
+
+function Lightbox({
+	images,
+	productName,
+	initialIndex,
+	onClose,
+}: LightboxProps) {
+	const [currentIndex, setCurrentIndex] = useState(initialIndex);
+	const hasMultiple = images.length > 1;
+
+	// Swallow Escape here (capture phase) so the parent Customizer's Escape
+	// handler doesn't also fire and close the whole modal.
+	useEffect(() => {
+		const handler = (e: KeyboardEvent) => {
+			if (e.key === "Escape") {
+				e.stopImmediatePropagation();
+				onClose(currentIndex);
+			}
+		};
+		document.addEventListener("keydown", handler, true);
+		return () => document.removeEventListener("keydown", handler, true);
+	}, [onClose, currentIndex]);
+
+	return createPortal(
+		<div
+			data-lightbox-active
+			className="fixed inset-0 z-60 flex flex-col bg-sand/95 backdrop-blur-md animate-fade-in in-view"
+			onClick={(e) => {
+				if (e.target === e.currentTarget) onClose(currentIndex);
+			}}
+			role="dialog"
+			aria-modal="true"
+			aria-label="Vista ampliada de la imagen"
+		>
+			<div className="relative flex items-center justify-between px-4 py-3 text-ink shrink-0">
+				<span className="text-sm font-bold font-head tabular-nums">
+					{hasMultiple ? `${currentIndex + 1} / ${images.length}` : ""}
+				</span>
+				<button
+					type="button"
+					onClick={() => onClose(currentIndex)}
+					aria-label="Cerrar vista ampliada"
+					className="grid w-10 h-10 transition rounded-full place-items-center cursor-pointer bg-white/70 hover:bg-white text-ink btn-press"
+				>
+					<svg
+						className="w-5 h-5"
+						fill="none"
+						stroke="currentColor"
+						viewBox="0 0 24 24"
+						strokeWidth={2.2}
+						strokeLinecap="round"
+					>
+						<path d="M6 18L18 6M6 6l12 12" />
+					</svg>
+				</button>
+			</div>
+
+			<div
+				className="flex-1 min-h-0"
+				onClick={(e) => {
+					if (e.target === e.currentTarget) onClose(currentIndex);
+				}}
+			>
+				<Swiper
+					modules={[Zoom]}
+					zoom={{ maxRatio: 5 }}
+					initialSlide={initialIndex}
+					loop={hasMultiple}
+					onRealIndexChange={(swiper) => setCurrentIndex(swiper.realIndex)}
+					className="h-full"
+				>
+					{images.map((image, i) => (
+						<SwiperSlide
+							// biome-ignore lint/suspicious/noArrayIndexKey: index is stable for a static images array
+							key={i}
+							className="flex items-center justify-center"
+						>
+							<div className="swiper-zoom-container w-full h-full flex items-center justify-center">
+								<img
+									src={image.src}
+									alt={`${productName} ${i + 1}`}
+									className="max-w-full max-h-full object-contain"
+								/>
+							</div>
+						</SwiperSlide>
+					))}
+				</Swiper>
+			</div>
+
+			{hasMultiple && (
+				<p className="px-4 pt-1 pb-3 text-xs text-center text-muted shrink-0">
+					Pellizcá para acercar · deslizá para cambiar de imagen
+				</p>
+			)}
+		</div>,
+		document.body,
+	);
+}
 
 interface ImageCarouselProps {
 	images: CarouselImage[];
@@ -27,12 +133,27 @@ export default function ImageCarousel({
 	const [zoomOrigin, setZoomOrigin] = useState({ x: 50, y: 50 });
 	const [activeIndex, setActiveIndex] = useState(0);
 	const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
+	const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	if (images.length === 0) return null;
 
 	const hasMultiple = images.length > 1;
 	const canZoom = !isMobile && !images[activeIndex]?.placeholder;
+	const canExpand = !images[activeIndex]?.placeholder;
+	const isLightboxOpen = lightboxIndex !== null;
+
+	const openLightbox = () => {
+		if (!canExpand) return;
+		setIsZoomed(false);
+		setLightboxIndex(activeIndex);
+	};
+	const closeLightbox = (finalIndex?: number) => {
+		if (finalIndex !== undefined && swiperInstance) {
+			swiperInstance.slideToLoop(finalIndex, 0);
+		}
+		setLightboxIndex(null);
+	};
 
 	const handleMouseEnter = () => {
 		if (canZoom) setIsZoomed(true);
@@ -122,6 +243,32 @@ export default function ImageCarousel({
 							);
 						})}
 					</Swiper>
+
+					{/* Expand-to-lightbox button. Mobile-first: pinch-zoom inside the
+					    modal is cramped, so we offer a near-fullscreen view. */}
+					{canExpand && (
+						<button
+							type="button"
+							onClick={openLightbox}
+							aria-label="Ver imagen ampliada"
+							className="absolute z-10 grid w-10 h-10 transition rounded-full shadow bottom-2.5 right-2.5 place-items-center cursor-pointer bg-white/90 hover:bg-white text-ink btn-press md:hidden"
+						>
+							<svg
+								className="w-5 h-5"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								strokeWidth={2.2}
+								strokeLinecap="round"
+								strokeLinejoin="round"
+							>
+								<path d="M15 3h6v6" />
+								<path d="M9 21H3v-6" />
+								<path d="M21 3l-7 7" />
+								<path d="M3 21l7-7" />
+							</svg>
+						</button>
+					)}
 				</div>
 
 				{/* Nav arrows: siblings of the zoom area so hovering them doesn't trigger zoom */}
@@ -162,6 +309,15 @@ export default function ImageCarousel({
 					</>
 				)}
 			</div>
+
+			{isLightboxOpen && (
+				<Lightbox
+					images={images}
+					productName={productName}
+					initialIndex={lightboxIndex}
+					onClose={closeLightbox}
+				/>
+			)}
 
 			{/* Pagination dots: below the image, never inside the zoom area */}
 			{hasMultiple && (

@@ -1,0 +1,10 @@
+{
+  "nombre": "Mi Delia #2",
+  "precio": 49000,
+  "precioTexto": "",
+  "descripcion": "Clásico y audaz.\nTela Arciel Inta.",
+  "disponible": true,
+  "imagenes": [
+    "/media/507877.webp"
+  ]
+}

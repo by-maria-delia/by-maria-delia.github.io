@@ -41,9 +41,9 @@ Non-technical editors manage this content through **Sveltia CMS** at `/admin/`, 
 | Pockets | `src/content/pockets/*.json` | Pockets collection |
 | Gallery photos (image, caption, visible) | `src/content/gallery/*.json` | Gallery collection |
 | Site copy + Instagram URL + WhatsApp number | `src/content/site.json` | Site Content singleton |
-| SEO / social-share metadata (title, description, OG image, favicon) | `src/content/site.json` → `seo` | Site Content → "SEO / Metadatos" section |
+| SEO / social-share metadata (title, description, OG image, favicon) | `src/content/seo.json` | "SEO / Metadatos" singleton under "Configuración del sitio" |
 
-The `seo` section is consumed at **build time** by the `site-seo` Vite plugin (see `vite.config.js`), which substitutes the values into `index.html`. This has to happen at build time because most social-link-preview crawlers (WhatsApp, Facebook, Instagram) do not run JavaScript, so a runtime React `useEffect` update to `<head>` would be invisible to them. Image paths in `seo.image` and `seo.favicon` are made absolute against the production origin by the plugin. If `seo.favicon` is empty, the build falls back to the default 🧵 emoji favicon.
+`seo.json` is a separate file (not a section of `site.json`) because it is a different concern: search engine and social-share metadata, not on-page content visitors read. It is consumed at **build time** by the `site-seo` Vite plugin (see `vite.config.js`), which substitutes the values into `index.html`. This has to happen at build time because most social-link-preview crawlers (WhatsApp, Facebook, Instagram) do not run JavaScript, so a runtime React `useEffect` update to `<head>` would be invisible to them. Image paths in `image` and `favicon` are made absolute against the production origin by the plugin. If `favicon` is empty, the build falls back to the default 🧵 emoji favicon.
 
 ## Project Structure
 

@@ -37,13 +37,12 @@ function siteSeoPlugin() {
   return {
     name: 'site-seo',
     transformIndexHtml(html) {
-      const sitePath = resolve(process.cwd(), 'src/content/site.json')
+      const seoPath = resolve(process.cwd(), 'src/content/seo.json')
       let seo = {}
       try {
-        const site = JSON.parse(readFileSync(sitePath, 'utf-8'))
-        seo = site.seo || {}
+        seo = JSON.parse(readFileSync(seoPath, 'utf-8'))
       } catch {
-        // site.json missing or malformed: fall through with empty defaults so
+        // seo.json missing or malformed: fall through with empty defaults so
         // the build still succeeds. Production should never hit this branch.
       }
       const title = seo.title || 'Maria Delia'

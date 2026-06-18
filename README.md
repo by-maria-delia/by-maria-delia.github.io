@@ -87,6 +87,30 @@ No environment variables or data-fetch step are required. Content is read straig
 
 None. The site is fully static and reads all content from in-repo files.
 
+## Analytics
+
+Privacy-friendly, cookieless analytics via **Umami Cloud** (free tier).
+
+- The `<script>` tag in `index.html` uses Umami's `data-domains` whitelist, so beacons only fire from production (`by-maria-delia.github.io`). Dev (`localhost`) and Netlify preview produce zero analytics traffic.
+- Custom events go through a tiny `src/utils/analytics.ts` helper (`track(name, props)`) that safely no-ops if Umami fails to load.
+
+### Tracked events
+
+| Event | Properties | Fired from |
+|---|---|---|
+| *(auto pageview)* | none | every page load |
+| `customizer_open` | `model_name` | `ProductCard` card click |
+| `whatsapp_click` | `model_name`, `size`, `base`, `pockets`, `estampado` | `Customizer` submit (the conversion) |
+| `social_click` | `platform` (`whatsapp` \| `instagram`), `location` (`navbar` \| `footer`) | outbound social links |
+
+### UTM convention
+
+Any link to the site placed in an Instagram bio, story, or post should carry `?utm_source=instagram` (use `_story`, `_post`, etc. as suffixes if useful). Instagram's in-app browser strips referrer headers, so without UTMs that traffic is misattributed as "Direct".
+
+### Maria-facing dashboard
+
+Umami's built-in "Share URL" feature exposes a read-only dashboard at a tokenized URL. The shop owner bookmarks it as "Mis números". A purpose-built friendlier page on top of Umami's API was considered and deferred (see ADR-0002).
+
 ## Deployment
 
 Two GitHub Actions workflows under `.github/workflows/`:

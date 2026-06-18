@@ -1,4 +1,5 @@
 import type { Product } from "../types";
+import { track } from "../utils/analytics";
 import { formatPrice } from "../utils/formatPrice";
 import ImagePlaceholder from "./ImagePlaceholder";
 
@@ -54,7 +55,10 @@ export default function ProductCard({
 				<h3 className="mb-3 text-xl font-head text-ink">{product.nombre}</h3>
 				<button
 					type="button"
-					onClick={() => onCustomize(product)}
+					onClick={() => {
+						track("customizer_open", { model_name: product.nombre });
+						onCustomize(product);
+					}}
 					className="w-full py-3 mt-auto text-sm font-bold text-white transition-colors rounded-xl btn-press bg-sky-deep hover:bg-sky-ink cursor-pointer"
 				>
 					Ver y personalizar

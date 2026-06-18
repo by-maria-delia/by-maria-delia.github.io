@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { useSiteContent } from "../data";
+import { track } from "../utils/analytics";
 
 export default function Navbar() {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const { brandName, nav, whatsappNumber } = useSiteContent();
 	const links = nav.links;
 	const waHref = `https://wa.me/${whatsappNumber}`;
+	const trackNavbarWhatsApp = () =>
+		track("social_click", { platform: "whatsapp", location: "navbar" });
 
 	return (
 		<header className="sticky top-0 z-50 border-b backdrop-blur-md bg-cream/85 border-ink/8">
@@ -33,6 +36,7 @@ export default function Navbar() {
 				{/* Desktop WhatsApp pill */}
 				<a
 					href={waHref}
+					onClick={trackNavbarWhatsApp}
 					className="items-center hidden gap-2 px-5 py-3 text-sm font-bold text-white transition-shadow rounded-full md:inline-flex font-head bg-mint-deep hover:shadow-lg hover:shadow-mint-deep/40 btn-press"
 				>
 					<svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -83,7 +87,10 @@ export default function Navbar() {
 					<a
 						href={waHref}
 						className="py-3 font-bold font-head text-mint-deep"
-						onClick={() => setMenuOpen(false)}
+						onClick={() => {
+							trackNavbarWhatsApp();
+							setMenuOpen(false);
+						}}
 					>
 						Pedir por WhatsApp →
 					</a>

@@ -1,4 +1,5 @@
 import { useSiteContent } from "../data";
+import { track } from "../utils/analytics";
 
 export default function Footer() {
 	const {
@@ -28,6 +29,12 @@ export default function Footer() {
 						href={`https://wa.me/${whatsappNumber}`}
 						target="_blank"
 						rel="noopener noreferrer"
+						onClick={() =>
+							track("social_click", {
+								platform: "whatsapp",
+								location: "footer",
+							})
+						}
 						className={linkClass}
 					>
 						<svg
@@ -45,6 +52,12 @@ export default function Footer() {
 						href={instagramUrl}
 						target="_blank"
 						rel="noopener noreferrer"
+						onClick={() =>
+							track("social_click", {
+								platform: "instagram",
+								location: "footer",
+							})
+						}
 						className={linkClass}
 					>
 						<svg

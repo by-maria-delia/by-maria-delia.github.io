@@ -85,6 +85,19 @@ export interface SiteContent {
 		location: string;
 		copyright: string;
 	};
+	/** Editable SEO / social-share metadata. Consumed at build time by the
+	 * `site-seo` Vite plugin, which substitutes these values into `index.html`.
+	 * Not read by any React component at runtime. */
+	seo?: {
+		title?: string;
+		description?: string;
+		/** Public path to the social-share image (e.g. `/og-image.jpg`). Made
+		 * absolute by the build plugin. */
+		image?: string;
+		imageAlt?: string;
+		/** Public path to a favicon, or empty to fall back to the default emoji. */
+		favicon?: string;
+	};
 }
 
 export interface WhatsAppParams {

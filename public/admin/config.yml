@@ -251,6 +251,28 @@ collections:
               - { name: whatsappLabel, label: "Etiqueta WhatsApp", widget: string }
               - { name: location, label: "Ubicación", widget: string }
               - { name: copyright, label: "Copyright", widget: string }
+          - name: seo
+            label: "SEO / Metadatos"
+            widget: object
+            hint: "Datos que ven los buscadores y aparecen cuando alguien comparte la página (WhatsApp, Facebook, Instagram)."
+            fields:
+              - { name: title, label: "Título de la página", widget: string, hint: "Lo que se ve en la pestaña del navegador y como titular en links compartidos." }
+              - { name: description, label: "Descripción", widget: text, hint: "Resumen breve (1–2 oraciones). Aparece en Google y como bajada en links compartidos." }
+              - name: image
+                label: "Imagen para compartir"
+                widget: image
+                required: false
+                media_folder: "/public/media/seo"
+                public_folder: "/media/seo"
+                hint: "Idealmente 1200×630 px. Es el thumbnail grande que se ve cuando se comparte la página en WhatsApp o Facebook."
+              - { name: imageAlt, label: "Descripción de la imagen", widget: string, required: false, hint: "Opcional. Una oración describiendo la imagen, por accesibilidad." }
+              - name: favicon
+                label: "Ícono del navegador (favicon)"
+                widget: image
+                required: false
+                media_folder: "/public/media/seo"
+                public_folder: "/media/seo"
+                hint: "Opcional. El íconito al lado del título en la pestaña. Si lo dejás vacío usamos el ícono predeterminado (🧵)."
       # Task 2: global sizes list shown in the Customizer.
       - name: talles
         label: "Talles"

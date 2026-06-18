@@ -109,7 +109,7 @@ Any link to the site placed in an Instagram bio, story, or post should carry `?u
 
 ### Maria-facing dashboard
 
-Umami's built-in "Share URL" feature exposes a read-only dashboard at a tokenized URL. The shop owner bookmarks it as "Mis números". A purpose-built friendlier page on top of Umami's API was considered and deferred (see ADR-0002).
+A **"Mis números" button** is injected into the Sveltia admin (`/admin/`) by `public/admin/mis-numeros.js`. Click it to open a modal showing four cards (visitas únicas, pedidos por WhatsApp, tasa de conversión, modelos más vistos) with a 7 / 30 / 90 day window selector. Data comes from Umami's Share API using a public share token; auth is inherited from `/admin/`'s GitHub-OAuth gate. Umami's native share dashboard at the bookmarked share URL remains the fallback. See ADR-0002 for the decision history.
 
 ## Deployment
 

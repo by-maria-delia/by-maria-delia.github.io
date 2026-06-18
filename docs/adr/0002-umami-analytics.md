@@ -4,7 +4,7 @@ Date: 2026-06-18
 
 ## Status
 
-Accepted
+Accepted. Amended 2026-06-18: the custom Maria-facing dashboard, originally deferred in favor of Umami's native Share URL, was built as a button + modal injected into `/admin/` (`public/admin/mis-numeros.js`). See the "Maria-facing dashboard" bullet below for the revised reasoning.
 
 ## Context
 
@@ -28,7 +28,7 @@ Use **Umami Cloud** (free tier, 10k events/month, cookieless, Spanish UI) for bo
 - **No per-step customizer events.** Each step (size selected, base selected, pocket selected, estampado selected) is not tracked individually. The funnel "visits → customizer_open → whatsapp_click" already answers the conversion question; per-step events triple the event volume for a metric the owner is unlikely to act on.
 - **No `lightbox_open` event.** The mobile image lightbox is a quality-of-engagement signal that overlaps with `customizer_open`. Skipping it keeps the event list short.
 - **Environment filtering via `data-domains`.** The Umami `<script>` carries `data-domains="by-maria-delia.github.io"`. The beacon is a no-op on `localhost` and on the Netlify preview deploy. No `import.meta.env.PROD` plumbing in the React code.
-- **Maria-facing dashboard via Umami's built-in Share URL, not a custom page.** Umami exposes a read-only dashboard at a tokenized URL. The owner bookmarks it as "Mis números". A purpose-built page on top of Umami's API was considered and deferred. It would commit us to UI design, copy, API integration, and ongoing maintenance for a dashboard one person looks at occasionally, and Umami's native dashboard is already Spanish-localized and clean. Revisit only if the owner finds the native dashboard noisy.
+- **Maria-facing dashboard via a "Mis números" button injected into the Sveltia admin.** Originally deferred (see Amended note above) in favor of Umami's native Share URL. Reversed after the owner tested the Share dashboard and found it required too many clicks to see the values for a specific event. The replacement is `public/admin/mis-numeros.js`, a vanilla-JS button + modal that calls Umami's Share API and renders four curated cards (visitas únicas, pedidos por WhatsApp, tasa de conversión, modelos más vistos) with a 7 / 30 / 90 day window selector. The share token is fetched at runtime from `/api/share/{shareId}` and used in the `x-umami-share-token` header for subsequent calls. Two reasons this works without new infrastructure: (1) the share URL is already public, so the share token is non-secret and embedding the share ID in client JS adds no exposure; (2) auth for who can *see* the button is inherited from `/admin/`'s existing GitHub-OAuth gate (Sveltia CMS). Umami's Share URL remains the fallback.
 - **UTM convention.** Instagram links in the bio, stories, and posts must carry `?utm_source=instagram` (or `_story`, `_post`). Instagram's in-app browser strips referrer headers, so without UTMs that traffic shows up as "Direct".
 
 ## Consequences
@@ -54,4 +54,4 @@ Negative / accepted trade-offs:
 - **PostHog free tier** (1M events/mo, funnels, heatmaps, session replay). Powerful, but heavier script and a busier UI than the owner needs. The single conversion event (WhatsApp click) does not justify a full product-analytics tool.
 - **Plausible** (~USD 9/month). The gold-standard non-technical-friendly dashboard, but paid. Worth revisiting if the analytics dashboard becomes a daily-driver for the owner.
 - **GA4**. Free and full-featured, but requires a consent banner for EU traffic, has a steep dashboard learning curve, and adds a heavy script. Rejected on owner-readability grounds.
-- **Custom "Mis números" page now** (password-gated client-side, Umami API token in JS). Considered. Deferred because the security model is hide-it-not-lock-it (anyone with devtools can extract the token), and the build commits us to maintenance for a dashboard that Umami's native UI may already cover. Revisit if the owner explicitly asks.
+- **Custom "Mis números" page on the storefront, password-gated client-side.** Considered and rejected. The security model is hide-it-not-lock-it (anyone with devtools can extract the token), and adding a password the owner has to remember is friction. The in-admin button supersedes this: same custom UI, no password (auth piggybacks on Sveltia's GitHub OAuth), and one less route to maintain.

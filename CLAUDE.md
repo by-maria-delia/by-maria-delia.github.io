@@ -46,6 +46,9 @@ Section backgrounds flow through SVG wave dividers (cream → sky → cream → 
 ### Brand Personality
 Artesanal, calido, prolijo, clasico, amigable, docente, femenino. All copy in **Spanish (Argentina)**.
 
+## SEO / social-share metadata
+Editable via Sveltia under "Configuración del sitio" → "SEO / Metadatos". Stored at `src/content/seo.json` (separate file from `site.json` because it is a different concern: search-engine + social-share crawlers, not on-page content). Fields: `title`, `description`, `image`, `imageAlt`, `favicon`. Consumed at build time by the `site-seo` Vite plugin in `vite.config.js`, which substitutes `%SEO_*%` placeholders in `index.html`. Build-time on purpose: WhatsApp / Facebook / Instagram crawlers do not run JS, so a runtime React update to `<head>` would be invisible to them. Image paths are made absolute against `https://by-maria-delia.github.io` by the plugin. Empty `favicon` falls back to the 🧵 emoji SVG default. `image` width/height meta tags are deliberately omitted so crawlers auto-detect (mismatched hints can cause some platforms to reject the preview).
+
 ## Analytics
 Umami Cloud, cookieless. The `<script>` in `index.html` carries `data-domains="by-maria-delia.github.io"`, so dev and Netlify preview produce zero beacons. Custom events go through `src/utils/analytics.ts` `track(name, props)` (typed, no-ops if Umami fails to load). Three custom events: `customizer_open` (`model_name`), `whatsapp_click` (`model_name`, `size`, `base`, `pockets`, `estampado`, this is the conversion), `social_click` (`platform`, `location`). Auto pageviews on top. Maria's dashboard is `public/admin/mis-numeros.js`, a vanilla-JS button + modal injected into the Sveltia admin that calls Umami's Share API (auth inherited from `/admin/`'s GitHub-OAuth gate). Explicitly NOT tracked in v1: per-step customizer drop-off, `lightbox_open`, error/perf monitoring. Rationale in `docs/adr/0002-umami-analytics.md`.
 

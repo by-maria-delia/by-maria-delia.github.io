@@ -17,7 +17,7 @@ export default function Hero() {
 			<span className="absolute rounded-full pointer-events-none w-22.5 h-22.5 bg-mint/55 blur-[2px] left-[46%] top-[8%]" />
 			<span className="absolute rounded-full pointer-events-none w-30 h-30 bg-sky/55 blur-[2px] right-[8%] bottom-[10%]" />
 
-			<div className="grid items-center max-w-6xl gap-9 px-5 py-11 mx-auto md:grid-cols-[1.05fr_0.95fr] md:py-20">
+			<div className="relative z-10 grid items-center max-w-6xl gap-9 px-5 py-11 mx-auto md:grid-cols-[1.05fr_0.95fr] md:py-20">
 				<FadeUp>
 					<span className="inline-block px-4 py-1.5 mb-4 text-sm font-bold bg-white rounded-full shadow-md font-head text-pink-deep shadow-ink/8">
 						{hero.eyebrow}

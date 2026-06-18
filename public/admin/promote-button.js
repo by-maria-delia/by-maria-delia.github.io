@@ -137,6 +137,21 @@
 	}
 
 	// --- compare API --------------------------------------------------------
+	// Construye los headers para llamar a la API de GitHub. Cuando hay token
+	// de Sveltia en localStorage (la editora ya inicio sesion), lo mandamos
+	// como Bearer para usar el limite de 5000 req/hora por usuario; sin token
+	// caemos al limite anonimo de 60/hora por IP, que se agota rapido con el
+	// polling post-dispatch y termina escondiendo el boton.
+	function compareHeaders() {
+		var headers = { Accept: "application/vnd.github+json" };
+		var token = getOAuthToken();
+		if (token) {
+			headers.Authorization = "Bearer " + token;
+			headers["X-GitHub-Api-Version"] = "2022-11-28";
+		}
+		return headers;
+	}
+
 	function refresh() {
 		var now = Date.now();
 		if (now - lastPollAt < POLL_DEBOUNCE_MS) return;
@@ -144,7 +159,7 @@
 
 		fetch(COMPARE_API, {
 			cache: "no-store",
-			headers: { Accept: "application/vnd.github+json" },
+			headers: compareHeaders(),
 		})
 			.then(function (res) {
 				if (res.status === 403) throw new Error("rate-limited");

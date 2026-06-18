@@ -1,0 +1,10 @@
+{
+  "nombre": "Mi Delia #3",
+  "precio": 49000,
+  "precioTexto": "",
+  "descripcion": "Clásico y combina con todo.\nTela Arciel Inta.",
+  "disponible": true,
+  "imagenes": [
+    "/media/507874.webp"
+  ]
+}

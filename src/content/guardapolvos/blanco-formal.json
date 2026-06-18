@@ -3,7 +3,7 @@
   "precio": 49000,
   "precioTexto": "",
   "descripcion": "Clásico y cómodo.\nTela Arciel Inta.",
-  "disponible": false,
+  "disponible": true,
   "imagenes": [
     "/media/504941.webp"
   ]

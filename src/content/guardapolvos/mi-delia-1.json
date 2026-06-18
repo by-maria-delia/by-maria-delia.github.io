@@ -1,0 +1,11 @@
+{
+  "nombre": "Mi Delia #1",
+  "precio": 47000,
+  "precioTexto": "",
+  "descripcion": "Sencillo y cómodo.\nTela Arciel Inta.",
+  "disponible": true,
+  "imagenes": [
+    "/media/507880.webp",
+    "/media/507883.webp"
+  ]
+}

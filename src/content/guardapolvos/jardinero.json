@@ -1,0 +1,10 @@
+{
+  "nombre": "Jardinero",
+  "precio": 55000,
+  "precioTexto": "",
+  "descripcion": "Canchero y un clásico que no pasa de moda.\nTela Arciel Inta.",
+  "disponible": true,
+  "imagenes": [
+    "/media/637532.webp"
+  ]
+}

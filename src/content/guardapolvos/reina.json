@@ -1,0 +1,10 @@
+{
+  "nombre": "Reina",
+  "precio": 56000,
+  "precioTexto": "",
+  "descripcion": "Detalles únicos que lo hacen especial.\nTela Arciel Inta.",
+  "disponible": true,
+  "imagenes": [
+    "/media/755040.webp"
+  ]
+}

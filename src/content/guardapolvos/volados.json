@@ -1,0 +1,10 @@
+{
+  "nombre": "Volados",
+  "precio": 60000,
+  "precioTexto": "",
+  "descripcion": "Volados y dulzura que acompañan tu caminar.\nTela Arciel Inta",
+  "disponible": true,
+  "imagenes": [
+    "/media/805249.webp"
+  ]
+}

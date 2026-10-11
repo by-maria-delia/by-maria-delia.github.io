@@ -1,0 +1,10 @@
+{
+  "nombre": "Blanco con volados",
+  "precio": 60000,
+  "precioTexto": "",
+  "descripcion": "Delicado y juvenil a la vez.\nTela Arciel Inta",
+  "disponible": true,
+  "imagenes": [
+    "/media/798718.webp"
+  ]
+}

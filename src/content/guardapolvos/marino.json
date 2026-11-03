@@ -1,0 +1,10 @@
+{
+  "nombre": "Marino",
+  "precio": 65000,
+  "precioTexto": "",
+  "descripcion": "Para usar sin descanso y elegante a la vez.\nTela Arciel Inta.",
+  "disponible": true,
+  "imagenes": [
+    "/media/950739.webp"
+  ]
+}
